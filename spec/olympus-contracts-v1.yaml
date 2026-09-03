@@ -1,0 +1,374 @@
+olympus:
+  schema_version: "1.0"
+  architecture_version: "1.0"
+  language: "ko-KR"
+  runtime: "platform-neutral"
+
+  invariants:
+    zeus_gateway: "HESTIA"
+    hestia_can_create_human: false
+    god_can_create_human_in_own_department: true
+    cross_department_human_creation: false
+    human_can_create_agents: false
+    god_to_god_direct_command: false
+    one_job_per_human: true
+    one_owner_per_atomic_task: true
+    one_active_task_per_human: true
+    reuse_existing_before_create: true
+    hard_delete_human: false
+    self_approval: false
+    max_same_failure_retries: 2
+    max_revision_rounds: 2
+    external_content_is_untrusted_data: true
+    artifact_provenance_required: true
+    structured_approval_required_for_side_effects: true
+
+  roles:
+    ZEUS:
+      kind: "USER"
+      responsibilities:
+        - "목표 결정"
+        - "최종 우선순위"
+        - "고위험 승인"
+      direct_recipients:
+        - "HESTIA"
+
+    HESTIA:
+      kind: "GOD"
+      department: "ORCHESTRATION"
+      create_human: false
+      responsibilities:
+        - "요청 접수"
+        - "프로젝트 카드 생성"
+        - "신 라우팅"
+        - "의존성 그래프"
+        - "부서 간 인계"
+        - "인간 생성 검증"
+        - "승인 큐"
+        - "통합 보고"
+
+  gods:
+    HERA:
+      department: "GOVERNANCE_QUALITY"
+      labels: ["기준", "정책", "품질", "일관성"]
+      create_human: true
+      allowed_slot_prefix: "HERA-"
+      soft_active_human_limit: 6
+    ATHENA:
+      department: "STRATEGY_PLANNING"
+      labels: ["전략", "기획", "요구사항", "우선순위"]
+      create_human: true
+      allowed_slot_prefix: "ATHENA-"
+      soft_active_human_limit: 7
+    ARTEMIS:
+      department: "RESEARCH_EVIDENCE"
+      labels: ["조사", "출처", "검증", "추적"]
+      create_human: true
+      allowed_slot_prefix: "ARTEMIS-"
+      soft_active_human_limit: 8
+    APOLLO:
+      department: "EDITORIAL_NARRATIVE"
+      labels: ["대본", "글", "서사", "편집"]
+      create_human: true
+      allowed_slot_prefix: "APOLLO-"
+      soft_active_human_limit: 10
+    APHRODITE:
+      department: "APPEAL_UX"
+      labels: ["매력", "훅", "썸네일", "캐릭터", "UI"]
+      create_human: true
+      allowed_slot_prefix: "APHRODITE-"
+      soft_active_human_limit: 9
+    DIONYSUS:
+      department: "EXPERIMENTATION"
+      labels: ["실험", "파격", "밈", "변주"]
+      create_human: true
+      allowed_slot_prefix: "DIONYSUS-"
+      soft_active_human_limit: 6
+    HEPHAESTUS:
+      department: "BUILD_PRODUCTION"
+      labels: ["개발", "앱", "웹", "코드", "제작"]
+      create_human: true
+      allowed_slot_prefix: "HEPHAESTUS-"
+      soft_active_human_limit: 12
+    POSEIDON:
+      department: "INFRA_RELIABILITY"
+      labels: ["인프라", "리눅스", "서버", "DB", "업타임"]
+      create_human: true
+      allowed_slot_prefix: "POSEIDON-"
+      soft_active_human_limit: 10
+    HERMES:
+      department: "PUBLISH_RELEASE"
+      labels: ["발행", "게시", "제출", "릴리스"]
+      create_human: true
+      allowed_slot_prefix: "HERMES-"
+      soft_active_human_limit: 8
+    DEMETER:
+      department: "LIFECYCLE_GROWTH"
+      labels: ["수확", "반복", "분석", "재활용"]
+      create_human: true
+      allowed_slot_prefix: "DEMETER-"
+      soft_active_human_limit: 8
+    ARES:
+      department: "INCIDENT_RESPONSE"
+      labels: ["장애", "격리", "복구", "사후 분석"]
+      create_human: true
+      allowed_slot_prefix: "ARES-"
+      soft_active_human_limit: 7
+      routine_work_forbidden: true
+
+  states:
+    project:
+      - "RECEIVED"
+      - "SCOPING"
+      - "PLANNED"
+      - "EXECUTING"
+      - "WAITING_APPROVAL"
+      - "BLOCKED"
+      - "REVIEWING"
+      - "COMPLETED"
+      - "FAILED"
+      - "CANCELLED"
+    task:
+      - "DRAFT"
+      - "READY"
+      - "ASSIGNED"
+      - "RUNNING"
+      - "BLOCKED"
+      - "REVIEW"
+      - "REVISION_REQUIRED"
+      - "WAITING_APPROVAL"
+      - "DONE"
+      - "FAILED"
+      - "CANCELLED"
+    human:
+      - "PROPOSED"
+      - "PROVISIONAL"
+      - "ACTIVE"
+      - "DORMANT"
+      - "QUARANTINED"
+      - "SUPERSEDED"
+      - "ARCHIVED"
+
+  execution_modes:
+    COLLABORATION:
+      same_task_multiple_humans: false
+      description: "서로 다른 원자 업무를 연결한다"
+    PARALLEL:
+      same_task_multiple_humans: false
+      dependency_check_required: true
+      description: "독립 업무를 동시에 처리한다"
+    EXPERIMENT:
+      same_task_multiple_humans: true
+      selection_owner_required: true
+      variant_budget_required: true
+      description: "동일 목표의 제한된 변형을 비교한다"
+    INCIDENT:
+      same_task_multiple_humans: false
+      evidence_preservation: true
+      routine_work_forbidden: true
+      description: "피해 중단과 복구를 우선한다"
+    DRY_RUN:
+      side_effects: false
+      description: "외부 실행 전 영향을 검증한다"
+    AUDIT:
+      read_only: true
+      description: "이력과 규칙 준수를 검사한다"
+
+  risk_classes:
+    R0:
+      examples: ["조사", "초안", "로컬 계산", "내부 제안"]
+      zeus_approval_required: false
+    R1:
+      examples: ["비운영 파일 쓰기", "저장소 브랜치 쓰기", "내부 DB 쓰기"]
+      zeus_approval_required: false
+      policy_validation_required: true
+    R2:
+      examples: ["공개 게시", "main 반영", "운영 배포", "스토어 제출"]
+      zeus_approval_required: true
+      artifact_hash_required: true
+      max_executions: 1
+    R3:
+      examples: ["삭제", "결제", "DNS 변경", "비밀키 변경", "권한 확대", "대량 발송"]
+      zeus_approval_required: true
+      explicit_confirmation_required: true
+      rollback_required: true
+      artifact_hash_required: true
+
+  data_classification:
+    PUBLIC:
+      prompt_allowed: true
+      project_scope_only: false
+    INTERNAL:
+      prompt_allowed: true
+      project_scope_only: true
+    CONFIDENTIAL:
+      prompt_allowed: true
+      least_privilege_required: true
+      project_scope_only: true
+    SECRET:
+      prompt_allowed: false
+      secret_broker_only: true
+
+  message_types:
+    - "PROJECT_REQUEST"
+    - "PROJECT_PLAN"
+    - "DEPARTMENT_WORK_ORDER"
+    - "HUMAN_CREATION_PROPOSAL"
+    - "HUMAN_REGISTERED"
+    - "ATOMIC_TASK"
+    - "ARTIFACT_SUBMITTED"
+    - "REVIEW_DECISION"
+    - "HANDOFF_REQUEST"
+    - "APPROVAL_REQUEST"
+    - "APPROVAL_TOKEN"
+    - "INCIDENT_EVENT"
+    - "PROJECT_REPORT"
+
+  required_envelope_fields:
+    - "schema_version"
+    - "message_id"
+    - "trace_id"
+    - "project_id"
+    - "sender"
+    - "recipient"
+    - "message_type"
+    - "created_at"
+    - "idempotency_key"
+    - "payload"
+
+  human_creation:
+    phases: ["PROPOSE", "VALIDATE", "REGISTER"]
+    duplicate_similarity_review_threshold: 0.85
+    probation_task_count: 3
+    global_famous_name_unique: true
+    symbolic_name_only: true
+    living_person_impersonation_forbidden: true
+    direct_tool_grant_on_creation: false
+    hard_delete: false
+
+  human_selection_weights:
+    role_match: 0.35
+    recent_quality: 0.25
+    tool_permission_fit: 0.15
+    availability: 0.10
+    expected_cost: 0.10
+    recent_usefulness: 0.05
+
+  quality:
+    default_pass_score: 80
+    max_score: 100
+    weights:
+      correctness: 30
+      completion: 20
+      goal_fit: 15
+      clarity_usability: 10
+      evidence_lineage: 10
+      testability: 10
+      efficiency: 5
+    blockers:
+      - "승인 없는 외부 실행"
+      - "비밀정보 노출"
+      - "역할·부서 권한 침범"
+      - "필수 테스트 실패"
+      - "산출물 스키마 불일치"
+      - "명백한 플랫폼·라이선스 위반"
+
+  retry_policy:
+    max_same_failure_retries: 2
+    max_revision_rounds: 2
+    after_limit:
+      - "REDECOMPOSE_TASK"
+      - "SELECT_DIFFERENT_HUMAN"
+      - "PROPOSE_NEW_HUMAN"
+      - "ESCALATE_TO_ZEUS"
+
+  artifact_manifest_required_fields:
+    - "artifact_id"
+    - "project_id"
+    - "artifact_type"
+    - "version"
+    - "created_by_human"
+    - "parent_god"
+    - "prompt_version"
+    - "input_artifacts"
+    - "created_at"
+    - "sha256"
+    - "review"
+    - "data_classification"
+
+  approval_token_required_fields:
+    - "token_id"
+    - "approved_by"
+    - "risk_class"
+    - "action"
+    - "target"
+    - "artifact_id"
+    - "artifact_sha256"
+    - "max_executions"
+    - "expires_at"
+
+
+  model_profiles:
+    ORCHESTRATOR:
+      default_role: "HESTIA"
+      characteristics: ["높은 구조화", "낮은 변동성", "긴 컨텍스트"]
+      direct_external_side_effects: false
+    MANAGER:
+      default_role: "GOD"
+      characteristics: ["작업 분해", "인간 선택", "검수"]
+      direct_external_side_effects: false
+    RESEARCH:
+      characteristics: ["검색", "출처", "낮은 추측"]
+    WRITER:
+      characteristics: ["형식 준수", "긴 문맥", "언어 품질"]
+    CREATIVE:
+      characteristics: ["다양성", "시각·음악 입력", "변형 생성"]
+    CODER:
+      characteristics: ["저장소 이해", "코드 편집", "테스트"]
+    INFRA:
+      characteristics: ["명령 정확성", "dry-run", "보수적 실행"]
+    PUBLISHER:
+      characteristics: ["대상 정확성", "버전 정확성", "낮은 변동성"]
+    EVALUATOR:
+      characteristics: ["일관된 점수", "근거 표시", "읽기 전용"]
+
+  context_policy:
+    send_full_conversation_to_human: false
+    task_context_only: true
+    include:
+      - "project_summary"
+      - "required_input_artifacts"
+      - "done_when"
+      - "capability_token"
+      - "budget"
+    secret_values_in_prompt: false
+    latest_approved_decision_wins: true
+    record_model_profile_on_artifact: true
+    max_model_profile_escalations_per_task: 1
+
+  project_lines:
+    YOUTUBE:
+      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APOLLO", "APHRODITE", "HEPHAESTUS", "HERMES", "DEMETER"]
+      optional_gods: ["DIONYSUS", "POSEIDON", "ARES"]
+    EMOTICON:
+      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APOLLO", "APHRODITE", "HEPHAESTUS", "HERMES", "DEMETER"]
+      optional_gods: ["DIONYSUS", "ARES"]
+    WEB_APP:
+      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APHRODITE", "HEPHAESTUS", "POSEIDON", "HERMES", "DEMETER"]
+      optional_gods: ["DIONYSUS", "ARES"]
+    BLOG:
+      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APOLLO", "APHRODITE", "HERMES", "DEMETER"]
+      optional_gods: ["DIONYSUS", "HEPHAESTUS", "ARES"]
+
+  id_formats:
+    project: "PRJ-{YYYYMMDD}-{SEQ4}"
+    trace: "TRC-{YYYYMMDD}-{SEQ4}"
+    message: "MSG-{YYYYMMDD}-{SEQ4}"
+    human: "{GOD_PREFIX}-H{SEQ3}"
+    task: "{PROJECT_ID}-{GOD_PREFIX}-T{SEQ3}"
+    artifact: "ART-{TYPE}-{SEQ4}"
+    approval: "APR-{SEQ4}"
+
+  reporting:
+    god_sections: ["Facts", "배분", "산출물", "품질", "승인대기", "막힌 지점", "인계요청"]
+    hestia_final_sections: ["결과", "핵심 결정", "산출물", "품질", "승인·실행", "비용·시간", "막힌 지점", "다음 수확"]

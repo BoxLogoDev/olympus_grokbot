@@ -1,0 +1,13 @@
+schema_version: '1.0'
+policy:
+  hard_delete: false
+  remove_from_registry: false
+  allowed_states:
+  - PROVISIONAL
+  - ACTIVE
+  - DORMANT
+  - QUARANTINED
+  - SUPERSEDED
+  - ARCHIVED
+  concurrent_task_limit: 1
+humans: []

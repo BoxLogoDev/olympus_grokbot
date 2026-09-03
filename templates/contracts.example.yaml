@@ -1,0 +1,180 @@
+# OLYMPUS v1.0 계약 예시
+# 각 문서는 독립된 저장 레코드로 사용할 수 있다.
+
+---
+kind: "PROJECT_REQUEST"
+schema_version: "1.0"
+request:
+  request_id: "REQ-20260903-0001"
+  requested_by: "ZEUS"
+  gateway: "HESTIA"
+  goal: "SAP 실무 풍자 유튜브 숏츠를 만들고 블로그로 재활용한다"
+  product_lines: ["YOUTUBE", "BLOG"]
+  constraints:
+    language: "ko-KR"
+    youtube_max_seconds: 60
+    brand: "박스로고 입은 개발자"
+  external_actions:
+    youtube_publish: "REQUIRES_APPROVAL"
+    blog_publish: "REQUIRES_APPROVAL"
+
+---
+kind: "PROJECT_PLAN"
+schema_version: "1.0"
+project:
+  project_id: "PRJ-20260903-0001"
+  trace_id: "TRC-20260903-0001"
+  status: "PLANNED"
+  objective: "SAP 현업 공감을 얻는 숏츠와 근거 있는 블로그 글 제작"
+  selected_gods:
+    - "ATHENA"
+    - "ARTEMIS"
+    - "HERA"
+    - "APOLLO"
+    - "APHRODITE"
+    - "HEPHAESTUS"
+    - "HERMES"
+    - "DEMETER"
+  omitted_gods:
+    DIONYSUS: "기본안 우선, 실험안 요청 없음"
+    POSEIDON: "별도 렌더 인프라 변경 없음"
+    ARES: "사고 상황 아님"
+  done_when:
+    - "숏츠 영상과 썸네일이 헤라 검수를 통과한다"
+    - "블로그 원고가 출처와 함께 검수를 통과한다"
+    - "제우스 승인 후 각 채널에 게시 기록이 남는다"
+
+---
+kind: "HUMAN_CREATION_PROPOSAL"
+schema_version: "1.0"
+proposal:
+  proposal_id: "HCP-20260903-0001"
+  requested_by_god: "APOLLO"
+  slot_id: "APOLLO-SHORTS-SCRIPT"
+  single_job: "승인된 비트 시트를 60초 숏츠 대본으로 변환한다"
+  reason_existing_humans_insufficient: "동일 슬롯에 등록된 인간이 없음"
+  proposed_display_name: null
+  symbolic_only: true
+  input_contract: ["SHORTS_BEAT_SHEET", "FACT_PACK", "BRAND_RULES"]
+  output_contract: "SHORTS_SCRIPT"
+  tool_requirements: ["artifact.read", "artifact.write"]
+  external_permissions: []
+  expected_reuse: "월 4회"
+  duplicate_search:
+    searched: true
+    nearest_human_id: null
+    similarity: 0.0
+  status: "PROPOSED"
+
+---
+kind: "HUMAN"
+schema_version: "1.0"
+human:
+  human_id: "AP-H001"
+  display_name: "상징 이름"
+  symbolic_only: true
+  parent_god: "APOLLO"
+  slot_id: "APOLLO-SHORTS-SCRIPT"
+  single_job: "승인된 비트 시트를 60초 숏츠 대본으로 변환한다"
+  prompt_version: "1.0.0"
+  model_profile: "WRITER"
+  status: "PROVISIONAL"
+  probation_tasks_remaining: 3
+  concurrent_task_limit: 1
+  quality_score: null
+  created_by: "APOLLO"
+  registered_by: "HESTIA"
+  hard_delete_allowed: false
+
+---
+kind: "ATOMIC_TASK"
+schema_version: "1.0"
+task:
+  task_id: "PRJ-20260903-0001-AP-T001"
+  project_id: "PRJ-20260903-0001"
+  owner_god: "APOLLO"
+  owner_human_id: "AP-H001"
+  title: "승인된 비트 시트를 숏츠 대본으로 변환"
+  single_action: "CREATE_SHORTS_SCRIPT"
+  model_profile: "WRITER"
+  inputs:
+    - artifact_id: "ART-BEATS-0001"
+      required_version: 2
+    - artifact_id: "ART-FACTS-0001"
+      required_version: 1
+  output_contract:
+    artifact_type: "SHORTS_SCRIPT"
+    format: "markdown"
+    schema: "shorts-script-v1"
+  capability_token:
+    tools: ["artifact.read", "artifact.write"]
+    filesystem_scope: ["/projects/PRJ-20260903-0001/apollo"]
+    network_scope: []
+    expires_at: "2026-09-03T12:00:00+09:00"
+  budget:
+    max_attempts: 2
+    max_revision_rounds: 2
+    max_runtime_seconds: 900
+    max_cost_usd: 1.0
+  done_when:
+    - "낭독 기준 60초 이내다"
+    - "핵심 주장마다 팩트 팩 근거가 연결된다"
+    - "첫 3초에 문제 상황이 제시된다"
+    - "장면 연출 인간이 사용할 수 있는 구간 표기가 있다"
+  status: "READY"
+
+---
+kind: "ARTIFACT"
+schema_version: "1.0"
+artifact:
+  artifact_id: "ART-SCRIPT-0001"
+  project_id: "PRJ-20260903-0001"
+  artifact_type: "SHORTS_SCRIPT"
+  version: 1
+  created_by_human: "AP-H001"
+  parent_god: "APOLLO"
+  model_profile: "WRITER"
+  prompt_version: "1.0.0"
+  input_artifacts:
+    - "ART-BEATS-0001@v2"
+    - "ART-FACTS-0001@v1"
+  created_at: "2026-09-03T11:10:00+09:00"
+  sha256: "<calculate-at-save>"
+  review:
+    reviewed_by: "APOLLO"
+    decision: "PENDING"
+    score: null
+  data_classification: "INTERNAL"
+
+---
+kind: "APPROVAL_REQUEST"
+schema_version: "1.0"
+approval_request:
+  request_id: "APRQ-0001"
+  project_id: "PRJ-20260903-0001"
+  requested_by: "HESTIA"
+  risk_class: "R2"
+  action: "YOUTUBE_PUBLISH"
+  target: "channel:BoxLogoDev"
+  artifact_id: "ART-VIDEO-0001"
+  artifact_sha256: "<fixed-video-hash>"
+  preview_artifact_id: "ART-PREVIEW-0001"
+  impact: "유튜브 공개 채널에 숏츠 1개 예약 게시"
+  rollback: "예약 시간 전 취소 또는 게시 후 비공개 전환"
+  status: "WAITING_ZEUS"
+
+---
+kind: "APPROVAL_TOKEN"
+schema_version: "1.0"
+approval_token:
+  token_id: "APR-0001"
+  approved_by: "ZEUS"
+  risk_class: "R2"
+  action: "YOUTUBE_PUBLISH"
+  target: "channel:BoxLogoDev"
+  artifact_id: "ART-VIDEO-0001"
+  artifact_sha256: "<fixed-video-hash>"
+  max_executions: 1
+  expires_at: "2026-09-04T10:00:00+09:00"
+  rollback_required: true
+  status: "ACTIVE"
