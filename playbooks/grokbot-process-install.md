@@ -128,3 +128,11 @@ workflow_ref는 절차 배포본의 ID·버전·해시다. 같은 버전의 실�
 실제 동시 개선 비교 JSON에는 product_line과 사전 등록한 계획의 comparison_plan_ref 문자열을 포함한다. 서로 다른 라인의 실행을 섞으면 거부한다.
 
 GitHub·Notion·Craft의 정보 원본·검색·기록·인계·갱신 기준은 [도구 사용 Process](tool-coordination.md)를 따른다.
+
+## 실제 export 검사 보강 (bridge 0.1.1)
+
+소문자·알 수 없는 product_line은 종료 코드 2로 거부한다. 원본은 유지하고 명시적 변환 사본만 검사한다.
+보고서는 전체 run_count, categorized_run_count, 라인별 검사/제외 수, 날짜 미확인 수, 루틴 비교 가능 범위를 포함한다.
+연결 누락은 missing_fields로 표시하며 tools=null과 tools=[]를 구분한다.
+Grokbot에서 python 명령이 없으면 사용 가능한 python3를 사용한다.
+다음 대조는 [기존 바인딩 재확인](grokbot-binding-recheck.md)을 따른다.

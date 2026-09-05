@@ -7,7 +7,7 @@
 
 | 묶음 | 이슈 | 저장소 산출물 | 실제 적용 상태 |
 |---|---|---|---|
-| Inception | [#3](https://github.com/BoxLogoDev/olympus_grokbot/issues/3) | 수동 export 지시문, JSON bridge, 비공개 구성표 검사 | 과거 문서 스냅샷만 대조. 현재 공유 컴퓨터 설정·복구용 전체 export 대기 |
+| Inception | [#3](https://github.com/BoxLogoDev/olympus_grokbot/issues/3) | 수동 export 지시문, JSON bridge, 비공개 구성표 검사 | 현재 export 및 bridge 실행·대조 보고를 Notion 본문으로 수신. 전체 원본 직접 검증·바인딩 확정 대기 |
 | 접수·인계 | [#4](https://github.com/BoxLogoDev/olympus_grokbot/issues/4) | 공통 Skill, 5개 라인 Skill·단계별 검수표, CLI 계약 | DRAFT. 실제 Bot의 Skill 연결·검수자·도구 버전 확정 대기 |
 | 원장·복구 | [#5](https://github.com/BoxLogoDev/olympus_grokbot/issues/5) | 실제 파일 검증 SQLite 원장, 상위 예산·점유·복구 CLI | 로컬 테스트 통과. Grokbot 공유 컴퓨터 설치 미실시 |
 | 검수·재작업 | [#6](https://github.com/BoxLogoDev/olympus_grokbot/issues/6) | 검수 예약, 증거·시도 결합, 원인별 반려, 부분 무효화 | 코드 검사 통과. 실제 검수 품질·부서장 검수 미확인 |
@@ -74,3 +74,9 @@ Notion 운영 내보내기 요약을 추가 수신했다. 첫 조회의 JSON 본
 현재 수신 연결의 첨부 다운로드가 거부되어 전체 상세 자료의 인계 검증은 보류했다.
 패키지 반입 보고는 원격 설치·실행 검증과 구분한다. 현재 Craft 호출의 연결 실패는 대체 export 경로로 처리한다.
 도구별 업무 원본·업무 ID 연결·읽기 확인·수신 확인은 지침 수준이며 자동 동기화는 미설치다.
+
+## bridge 원격 실행 보고 수신
+
+Grokbot에서 61981b5의 원본/대문자 사본 검사를 실행했다는 명령·커밋·종료 코드와 대조 요약을 Notion 본문에서 확인했다.
+이는 bridge의 원격 사용 보고이며 다섯 라인 운영 완료 증거는 아니다. 원본 JSON·실행 로그 첨부의 직접 검증은 별도다.
+소문자 라인 누락은 검사기 0.1.1로 수정했다. [바인딩 재확인](../../playbooks/grokbot-binding-recheck.md)으로 객체 종류와 적용 Skill·도구 근거부터 확인한다.
