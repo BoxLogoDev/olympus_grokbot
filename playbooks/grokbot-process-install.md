@@ -126,3 +126,5 @@ workflow_ref는 절차 배포본의 ID·버전·해시다. 같은 버전의 실�
 업무별 입력 자산은 달라도 되며 실제 검증 증거는 각 입력·시도·결과 스냅샷에 별도로 고정된다.
 
 실제 동시 개선 비교 JSON에는 product_line과 사전 등록한 계획의 comparison_plan_ref 문자열을 포함한다. 서로 다른 라인의 실행을 섞으면 거부한다.
+
+GitHub·Notion·Craft의 정보 원본·검색·기록·인계·갱신 기준은 [도구 사용 Process](tool-coordination.md)를 따른다.

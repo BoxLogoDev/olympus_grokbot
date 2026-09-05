@@ -1,7 +1,7 @@
 ---
 name: olympus-process
 description: OLYMPUS 전체 업무의 요청·단일 담당자 인계·증거 기반 완료·복구를 관리한다. 헤스티아의 실행 계획과 함께 사용한다.
-version: 0.1.0
+version: 0.1.1
 ---
 
 # OLYMPUS 공통 Process
@@ -32,3 +32,5 @@ Grokbot의 실제 설정과 원장의 주장은 별개다. Bot ID 문자열·Not
 인증된 제우스 승인을 발행하지 않는다. 관련 도구를 통해 확인한 값만 기록한다.
 
 공통 입력·원형 변경은 change-reference로 전체 소비자와 후속 단계의 영향을 검토한다. handoff 출력으로 다음 담당자에게 인계한다. reuse는 유효한 후보만 찾으며 새 업무의 독립 검수를 생략하지 않는다.
+
+GitHub·Notion·Craft 기록·인계에는 [olympus-tool-use](../olympus-tool-use/SKILL.md)를 적용한다. 기준 원본을 찾고 변경 후 실제 내용을 다시 읽어 확인한다.

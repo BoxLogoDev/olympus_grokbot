@@ -37,3 +37,16 @@ class BridgeTests(unittest.TestCase):
             self.assertEqual(read_export(path), self.fixture())
             path.write_text("```json\n{}\n```\n```json\n{}\n```", encoding="utf-8")
             with self.assertRaises(OperationError): read_export(path)
+
+    def test_empty_notion_payload_is_incomplete_transfer(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "empty.md"
+            path.write_text("Summary and remote path\n```json\n\n```", encoding="utf-8")
+            with self.assertRaisesRegex(OperationError, "EXPORT_INCOMPLETE"):
+                read_export(path)
+
+    def test_summary_without_explicit_lists_is_not_empty_inventory(self):
+        data = self.fixture()
+        del data["runs"]
+        with self.assertRaisesRegex(OperationError, "EXPORT_INCOMPLETE"):
+            inspect_inventory(data)

@@ -428,3 +428,5 @@ Designed by **[BoxLogoDev](https://github.com/BoxLogoDev)**
 [YAML 계약](./spec/olympus-contracts-v1.yaml)
 
 </div>
+
+GitHub·Notion·Craft의 정보 원본·검색·기록·인계·갱신 기준은 [도구 사용 Process](./playbooks/tool-coordination.md)를 따른다.

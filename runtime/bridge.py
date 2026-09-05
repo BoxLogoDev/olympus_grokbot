@@ -28,6 +28,7 @@ def read_export(path):
         return load_json(path)
     blocks = re.findall(r"```json\s*\n(.*?)\n```", raw, re.S)
     require(len(blocks) == 1, "provide exactly one JSON inventory block")
+    require(bool(blocks[0].strip()), "EXPORT_INCOMPLETE: JSON block is empty; provide the readable inventory payload")
     # Reuse duplicate/nonfinite detection without temporary files.
     def pairs(items):
         result = {}
@@ -40,13 +41,15 @@ def read_export(path):
 
 
 def inspect_inventory(bundle):
+    require(isinstance(bundle, dict), "inventory must be a JSON object")
     reject_secrets(bundle)
     require(bundle.get("schema_version") == "1.0", "unknown inventory version")
     require(bundle.get("source_ref") and bundle.get("collected_at"), "source and collection timestamp required")
     timestamp = datetime.fromisoformat(bundle["collected_at"])
     require(timestamp.tzinfo is not None, "timezone required")
     require(timestamp <= datetime.now(timezone.utc), "future inventory timestamp")
-    bots = bundle.get("bots", []); routines = bundle.get("routines", []); runs = bundle.get("runs", [])
+    require(all(k in bundle for k in ("bots", "routines", "runs")), "EXPORT_INCOMPLETE: explicit bots, routines and runs lists required")
+    bots = bundle["bots"]; routines = bundle["routines"]; runs = bundle["runs"]
     require(all(isinstance(x, list) for x in [bots, routines, runs]), "inventory lists required")
     ids = [b["bot_id"] for b in bots]
     require(len(ids) == len(set(ids)), "duplicate Bot ID")

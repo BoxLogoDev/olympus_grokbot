@@ -19,7 +19,7 @@
 
 ## 확인한 검증
 
-Windows / Python 3.12에서 단위 테스트 70개, 기존 계약 검사와 새 Process 계약 검사가 통과했다.
+Windows / Python 3.12에서 단위 테스트 72개, 기존 계약 검사와 새 Process 계약 검사가 통과했다.
 로컬 5라인 파일 스모크는 TEST로 실행했고 실제 지표 집계에서 5개 모두 제외되는 것을 확인했다.
 GitHub CI는 Ubuntu·Windows의 Python 3.11·3.12 네 조합에서 같은 검사를 실행한다.
 원격 CI 결과는 PR checks를 기준으로 확인한다.
@@ -27,3 +27,9 @@ GitHub CI는 Ubuntu·Windows의 Python 3.11·3.12 네 조합에서 같은 검사
 현재 실제 Grokbot 설치나 10회의 수동 종단간 검증을 수행하지 않았다.
 현재 상태·초기 지표·운영 대기 조건은 [운영 적용표](../operations/implementation-status.md)에 기록한다.
 설치 절차는 [Grokbot 설치 안내](../../playbooks/grokbot-process-install.md)를 따른다.
+
+## 도구 사용 Process 추가
+
+기준 원본, 업무 ID 연결, 도구 호출 후 읽기 확인, 인계 수신 확인, 갱신·충돌·연결 장애 처리와 측정 기준을 추가했다.
+관련 지침은 [도구 사용 Process](../../playbooks/tool-coordination.md)다. 공통 Skill은 0.1.1 초안으로 갱신했다.
+빈 Notion JSON 블록과 필수 목록이 없는 요약을 불완전 인계로 거부하는 회귀 검사를 추가했다. 외부 DB나 웹훅은 설치하지 않았다.
