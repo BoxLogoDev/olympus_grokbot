@@ -1,6 +1,6 @@
 olympus:
-  schema_version: '1.2'
-  architecture_version: '1.2'
+  schema_version: '1.3'
+  architecture_version: '1.3'
   language: ko-KR
   runtime: platform-neutral
   invariants:
@@ -793,6 +793,18 @@ olympus:
     OLY-CHR-001:
     - character_policy
     - project_lines.CHARACTER
+    OLY-OPS-001:
+    - operations_policy.workflow_reuse
+    OLY-OPS-002:
+    - operations_policy.checkpoint_and_invalidation
+    OLY-OPS-003:
+    - operations_policy.evaluation
+    OLY-OPS-004:
+    - operations_policy.curated_memory
+    OLY-OPS-005:
+    - operations_policy.version_change
+    OLY-OPS-006:
+    - operations_policy.resource_control
   character_policy:
     rule_id: OLY-CHR-001
     playbook: playbooks/character-production.md
@@ -880,3 +892,68 @@ olympus:
     source_storage_default: CONTROLLED_EXTERNAL_ASSET_STORE
     new_training_or_paid_tool_activation_included: false
     retry_policy: retry_policy
+  implementation_stage: DOCUMENTED
+  runtime_status: LOCAL_SIMULATION_ONLY
+  operations_policy:
+    spec_path: spec/operations-v1.yaml
+    playbook: playbooks/agent-operations.md
+    schema_version: '1.0'
+    implementation_stage: DOCUMENTED
+    runtime_status: LOCAL_SIMULATION_ONLY
+    preserves_existing_invariants: true
+    adds_gods_or_human_slots: false
+    workflow_reuse:
+      rule_id: OLY-OPS-001
+      contract_ref: operations.workflow_reuse
+      owner: HESTIA
+      reuse_grants_scheduling_or_publication: false
+    checkpoint_and_invalidation:
+      rule_id: OLY-OPS-002
+      contract_ref: operations.checkpoint_and_invalidation
+      immutable_history: true
+      retry_policy_ref: retry_policy
+      changed_manifest_requires_new_approval: true
+    evaluation:
+      rule_id: OLY-OPS-003
+      contract_ref: operations.evaluation
+      owner: HERA
+      synthetic_is_real_evidence: false
+      blockers_override_score: true
+    curated_memory:
+      rule_id: OLY-OPS-004
+      contract_ref: operations.curated_memory
+      proposal_is_verified_memory: false
+      automatic_policy_or_canon_promotion: false
+    version_change:
+      rule_id: OLY-OPS-005
+      contract_ref: operations.version_change
+      owner: HESTIA
+      score_alone_activates_candidate: false
+      preserve_human_identity_and_history: true
+    resource_control:
+      rule_id: OLY-OPS-006
+      contract_ref: operations.resource_control
+      owner: HESTIA
+      global_single_task_per_human: true
+      parent_budget_and_review_backpressure_required: true
+    workflow_task_extension_required_fields:
+    - execution_ref
+    - policy_version
+    - policy_commit
+    - parent_budget_id
+    - memory_refs
+    execution_ref_fields:
+    - workflow_id
+    - workflow_version
+    - workflow_sha256
+    - run_id
+    - stage_id
+    - revision
+    - checkpoint_ref
+    real_service_status:
+      router: NOT_IMPLEMENTED
+      model_gateway: NOT_IMPLEMENTED
+      tool_gateway: NOT_IMPLEMENTED
+      authenticated_approval_queue: NOT_IMPLEMENTED
+      external_publication: NOT_IMPLEMENTED
+      routine_scheduler: NOT_IMPLEMENTED

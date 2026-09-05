@@ -1,10 +1,10 @@
-# OLYMPUS v1.2 계약 예시
+# OLYMPUS v1.3 계약 예시
 # 각 문서는 독립된 저장 레코드로 사용할 수 있다.
 # 플레이스홀더를 포함한 문서 예시이며 유효한 승인 토큰이나 실행 설정이 아니다.
 
 ---
 kind: "PROJECT_REQUEST"
-schema_version: "1.2"
+schema_version: "1.3"
 request:
   request_id: "REQ-20260903-0001"
   requested_by: "ZEUS"
@@ -21,7 +21,7 @@ request:
 
 ---
 kind: "PROJECT_PLAN"
-schema_version: "1.2"
+schema_version: "1.3"
 project:
   project_id: "PRJ-20260903-0001"
   trace_id: "TRC-20260903-0001"
@@ -47,7 +47,7 @@ project:
 
 ---
 kind: "HUMAN_CREATION_PROPOSAL"
-schema_version: "1.2"
+schema_version: "1.3"
 proposal:
   proposal_id: "HCP-20260903-0001"
   requested_by_god: "APOLLO"
@@ -69,7 +69,7 @@ proposal:
 
 ---
 kind: "HUMAN"
-schema_version: "1.2"
+schema_version: "1.3"
 human:
   human_id: "AP-H001"
   display_name: "상징 이름"
@@ -92,7 +92,7 @@ human:
 
 ---
 kind: "ATOMIC_TASK"
-schema_version: "1.2"
+schema_version: "1.3"
 task:
   task_id: "PRJ-20260903-0001-AP-T001"
   project_id: "PRJ-20260903-0001"
@@ -136,7 +136,7 @@ task:
 
 ---
 kind: "ARTIFACT"
-schema_version: "1.2"
+schema_version: "1.3"
 artifact:
   artifact_id: "ART-SCRIPT-0001"
   project_id: "PRJ-20260903-0001"
@@ -146,7 +146,7 @@ artifact:
   parent_god: "APOLLO"
   model_profile: "WRITER"
   prompt_version: "1.1.0"
-  policy_version: "1.2"
+  policy_version: "1.3"
   policy_commit: "<loaded-policy-commit>"
   input_artifacts:
     - "ART-BEATS-0001@v2"
@@ -162,7 +162,7 @@ artifact:
 
 ---
 kind: "APPROVAL_REQUEST"
-schema_version: "1.2"
+schema_version: "1.3"
 approval_request:
   request_id: "APRQ-0001"
   project_id: "PRJ-20260903-0001"
@@ -179,7 +179,7 @@ approval_request:
 
 ---
 kind: "APPROVAL_TOKEN"
-schema_version: "1.2"
+schema_version: "1.3"
 approval_token:
   token_id: "APR-0001"
   approved_by: "ZEUS"
@@ -197,7 +197,7 @@ approval_token:
 
 ---
 kind: "ACTION_MANIFEST"
-schema_version: "1.2"
+schema_version: "1.3"
 action_manifest:
   action_manifest_id: "ACT-YOUTUBE-0001"
   action: "YOUTUBE_PUBLISH"
@@ -224,7 +224,7 @@ action_manifest:
 
 ---
 kind: "EXECUTION_TEMPLATE"
-schema_version: "1.2"
+schema_version: "1.3"
 execution_template:
   template_id: "TPL-APOLLO-SHORTS-SCRIPT"
   version: "1.1.0"
@@ -247,7 +247,7 @@ execution_template:
 
 ---
 kind: "ROUTINE_PROPOSAL"
-schema_version: "1.2"
+schema_version: "1.3"
 routine:
   routine_id: "RTN-EXAMPLE-0001"
   workflow_version: "1.1.0"
@@ -262,3 +262,122 @@ routine:
   disable_procedure: "스케줄러 비활성화 후 진행 중 업무·원격 실행 상태를 대조한다"
   activation_approval_ref: null
   # 빈 검증 기록과 승인 참조는 의도적인 미준비 예시다. 예약 활성화하면 안 된다.
+
+---
+# 운영 계약의 문서 예시다. 실제 실행·승인·측정 증거가 아니다.
+# 실행 가능한 로컬 입력 형식은 runtime/README.md와 examples/를 따른다.
+kind: "WORKFLOW_PROPOSAL"
+schema_version: "1.3"
+workflow:
+  workflow_id: "WF-BAM-EXPRESSIONS"
+  version: "0.1.0"
+  sha256: "<hash-of-reviewed-workflow>"
+  policy_version: "1.3"
+  policy_commit: "<loaded-policy-commit>"
+  input_contract: ["APPROVED_BAM_CANON", "HASH_VERIFIED_REFERENCES", "PRODUCTION_BRIEF"]
+  output_contract: "REVIEWED_EXPRESSION_AND_MOTION_PACKAGE"
+  stages: []
+  review_gates: ["HERA_CHARACTER_CONSISTENCY", "TARGET_FORMAT_REVIEW"]
+  approval_gates: ["ZEUS_CANON_APPROVAL", "ZEUS_COMPLETE_PUBLIC_ACTION_MANIFEST"]
+  validation_runs: []
+  status: "DRAFT"
+  selected_by: null
+  block_reason: "각 단계·담당자·승인 원형·실제 검증 실행이 아직 없어 실행 불가"
+
+---
+kind: "PROJECT_RESOURCE_POLICY"
+schema_version: "1.3"
+resource_policy:
+  project_id: "PRJ-BAM-EXAMPLE"
+  parent_project_id: null
+  root_budget_id: "BUDGET-BAM-EXAMPLE"
+  budget_unit: "SIMULATION_UNIT"
+  max_cost_units: 100
+  max_active_tasks: 2
+  max_pending_reviews: 2
+  review_capacity: 1
+  review_budget_reserve_units: 20
+  stop_conditions: ["BUDGET_EXHAUSTED", "SAME_FAILURE_TWICE", "UNKNOWN_EXTERNAL_OUTCOME"]
+  resume_policy: "정산·검수 대기·의존성 회복 확인 후 헤스티아 계획 참조로 재개"
+  # 수치는 형식 설명용이며 실제 사용자 예산이나 운영 설정이 아니다.
+
+---
+kind: "CHECKPOINT"
+schema_version: "1.3"
+checkpoint:
+  checkpoint_id: "CP-BAM-EXAMPLE"
+  project_id: "PRJ-BAM-EXAMPLE"
+  run_id: "RUN-BAM-EXAMPLE"
+  workflow_ref: {id: "WF-BAM-EXPRESSIONS", version: "0.1.0", sha256: "<workflow-hash>"}
+  stage_id: "expression-surprised"
+  task_id: "TASK-BAM-EXAMPLE"
+  revision: 0
+  input_generation: 0
+  input_digest: "<digest-of-all-pinned-inputs>"
+  input_refs: [{id: "BAM-CANON", version: "<approved-version>", sha256: "<approved-hash>"}]
+  output_refs: []
+  owner_human_id: "<registered-single-owner>"
+  lease_generation: 0
+  execution_template_ref: "<id-version-hash>"
+  model_profile_ref: "<profile-version>"
+  policy_version: "1.3"
+  policy_commit: "<loaded-policy-commit>"
+  memory_refs: []
+  review_ref: null
+  retry_lineage_ref: "TASK-BAM-EXAMPLE"
+  cumulative_attempts: 0
+  cumulative_cost_units: 0
+  created_at: "<actual-ISO8601-time>"
+  validity: "REVIEW_REQUIRED"
+  # 체크포인트가 존재해도 산출물·현재 원형·검수가 없으면 재사용할 수 없다.
+
+---
+kind: "MEMORY_PROPOSAL"
+schema_version: "1.3"
+memory:
+  memory_id: "MEM-BAM-EXAMPLE"
+  version: "0.1.0"
+  kind: "HYPOTHESIS"
+  statement: "특정 동작 설정이 밤의 잎 변형에 영향을 줄 수 있다는 검증 대기 가설"
+  status: "PROPOSED"
+  evidence_refs: []
+  scope:
+    project_id: "PRJ-BAM-EXAMPLE"
+    department: "BUILD_PRODUCTION"
+    slot_id: "HEPHAESTUS-CHARACTER-ANIMATOR"
+    template_version: "<tested-version>"
+    model_profile_version: "<tested-profile-version>"
+    character_canon_ref: "<approved-canon-id-version-hash>"
+    data_classification: "INTERNAL"
+  owner_god: "HEPHAESTUS"
+  proposed_by: "DEMETER"
+  verified_by: null
+  verification_ref: null
+  valid_from: null
+  expires_at: null
+  supersedes: null
+  revoked_at: null
+  revocation_reason: null
+  # 실제 증거가 없는 문서 예시이며 ACTIVE 검색 기억으로 사용하면 안 된다.
+
+---
+kind: "VERSION_CHANGE_PROPOSAL"
+schema_version: "1.3"
+change:
+  change_id: "CHG-BAM-EXAMPLE"
+  scope: "동일 직무의 다음 내부 제작 업무만 비교 후보"
+  baseline_ref: "<current-template-id-version-hash>"
+  candidate_ref: "<candidate-template-id-version-hash>"
+  changed_dimensions: ["PROMPT_VERSION"]
+  dataset_ref: "<same-held-out-real-cases-id-version-hash>"
+  rubric_ref: "<same-rubric-version>"
+  minimum_sample_policy: "비교 결과를 보기 전에 업무별 표본 수와 범위를 정한다"
+  acceptance_criteria:
+    - "차단 조건 없이 사전에 정한 품질·비용·시간 기준을 충족한다"
+    - "독립 라벨과 같은 입력의 쌍별 결과로 평가한다"
+  stop_conditions: ["NEW_BLOCKER", "QUALITY_REGRESSION", "BUDGET_EXCEEDED"]
+  rollback_ref: "<current-policy-compatible-baseline>"
+  evaluation_report_ref: null
+  review_decision_ref: null
+  status: "PROPOSED"
+  # 표본이 없거나 합성 자료만 있으면 적용 근거가 되지 않는다.

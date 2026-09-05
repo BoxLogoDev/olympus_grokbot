@@ -1,0 +1,2 @@
+# Used only by scripts/validate_contracts.py. Runtime and unit tests use the standard library.
+PyYAML==6.0.3

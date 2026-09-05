@@ -1,0 +1,57 @@
+{
+  "mode": "LOCAL_SIMULATION",
+  "project_id": "bam-local-demo",
+  "workflow_version": "bam-simulation-v1.3",
+  "policy_version": "1.2",
+  "policy_commit": "a6e7a8b1f1624c40ee2712e825f4c853439d028e",
+  "policy_baseline_note": "Immutable source policy baseline: v1.2. The v1.3 local simulation extension is not a production-loaded v1.3 policy.",
+  "budget_units": 100,
+  "concurrency_limit": 2,
+  "review_limit": 2,
+  "tasks": [
+    {
+      "id": "reference-fixture",
+      "owner": "SIM-REFERENCE",
+      "reviewer": "SIM-REVIEWER",
+      "action_kind": "LOCAL_SIMULATION",
+      "external_action": false,
+      "dependencies": [],
+      "input": {"character": "밤", "reference_status": "CANDIDATE", "fixture_only": true},
+      "output_schema": {"asset_id": "str", "simulation": "bool"},
+      "done_when": "자리표시자 메타데이터 스키마를 확인한다. 실제 원형 승인이나 그림 제작은 수행하지 않는다."
+    },
+    {
+      "id": "expression-calm",
+      "owner": "SIM-STILL-A",
+      "reviewer": "SIM-REVIEWER",
+      "action_kind": "LOCAL_SIMULATION",
+      "external_action": false,
+      "dependencies": ["reference-fixture"],
+      "input": {"expression": "평온", "fixture_only": true},
+      "output_schema": {"asset_id": "str", "simulation": "bool"},
+      "done_when": "평온 표정 작업의 로컬 상태 전이만 확인한다. 이미지 품질 검증을 의미하지 않는다."
+    },
+    {
+      "id": "expression-surprised",
+      "owner": "SIM-STILL-B",
+      "reviewer": "SIM-REVIEWER",
+      "action_kind": "LOCAL_SIMULATION",
+      "external_action": false,
+      "dependencies": ["reference-fixture"],
+      "input": {"expression": "당황", "leaf_fixture_version": 1, "fixture_only": true},
+      "output_schema": {"asset_id": "str", "simulation": "bool"},
+      "done_when": "당황 표정 작업의 로컬 상태 전이만 확인한다. 이미지 품질 검증을 의미하지 않는다."
+    },
+    {
+      "id": "package-fixture",
+      "owner": "SIM-PACKAGER",
+      "reviewer": "SIM-REVIEWER",
+      "action_kind": "LOCAL_SIMULATION",
+      "external_action": false,
+      "dependencies": ["expression-calm", "expression-surprised"],
+      "input": {"format": "metadata-only", "fixture_only": true},
+      "output_schema": {"asset_id": "str", "simulation": "bool"},
+      "done_when": "메타데이터 자리표시자의 의존성 검수 여부를 확인한다. 파일 패키징이나 배포는 수행하지 않는다."
+    }
+  ]
+}
