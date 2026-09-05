@@ -1,9 +1,10 @@
-# OLYMPUS v1.0 계약 예시
+# OLYMPUS v1.1 계약 예시
 # 각 문서는 독립된 저장 레코드로 사용할 수 있다.
+# 플레이스홀더를 포함한 문서 예시이며 유효한 승인 토큰이나 실행 설정이 아니다.
 
 ---
 kind: "PROJECT_REQUEST"
-schema_version: "1.0"
+schema_version: "1.1"
 request:
   request_id: "REQ-20260903-0001"
   requested_by: "ZEUS"
@@ -20,7 +21,7 @@ request:
 
 ---
 kind: "PROJECT_PLAN"
-schema_version: "1.0"
+schema_version: "1.1"
 project:
   project_id: "PRJ-20260903-0001"
   trace_id: "TRC-20260903-0001"
@@ -46,7 +47,7 @@ project:
 
 ---
 kind: "HUMAN_CREATION_PROPOSAL"
-schema_version: "1.0"
+schema_version: "1.1"
 proposal:
   proposal_id: "HCP-20260903-0001"
   requested_by_god: "APOLLO"
@@ -68,7 +69,7 @@ proposal:
 
 ---
 kind: "HUMAN"
-schema_version: "1.0"
+schema_version: "1.1"
 human:
   human_id: "AP-H001"
   display_name: "상징 이름"
@@ -76,9 +77,12 @@ human:
   parent_god: "APOLLO"
   slot_id: "APOLLO-SHORTS-SCRIPT"
   single_job: "승인된 비트 시트를 60초 숏츠 대본으로 변환한다"
-  prompt_version: "1.0.0"
+  prompt_version: "1.1.0"
+  template_id: "TPL-APOLLO-SHORTS-SCRIPT"
+  template_version: "1.1.0"
   model_profile: "WRITER"
-  status: "PROVISIONAL"
+  status: "DORMANT"
+  probation_status: "PROVISIONAL"
   probation_tasks_remaining: 3
   concurrent_task_limit: 1
   quality_score: null
@@ -88,7 +92,7 @@ human:
 
 ---
 kind: "ATOMIC_TASK"
-schema_version: "1.0"
+schema_version: "1.1"
 task:
   task_id: "PRJ-20260903-0001-AP-T001"
   project_id: "PRJ-20260903-0001"
@@ -102,6 +106,8 @@ task:
       required_version: 2
     - artifact_id: "ART-FACTS-0001"
       required_version: 1
+    - artifact_id: "ART-BRAND-0001"
+      required_version: 1
   output_contract:
     artifact_type: "SHORTS_SCRIPT"
     format: "markdown"
@@ -112,7 +118,8 @@ task:
     network_scope: []
     expires_at: "2026-09-03T12:00:00+09:00"
   budget:
-    max_attempts: 2
+    max_attempts_per_revision: 2
+    max_total_attempts: 6
     max_revision_rounds: 2
     max_runtime_seconds: 900
     max_cost_usd: 1.0
@@ -121,11 +128,15 @@ task:
     - "핵심 주장마다 팩트 팩 근거가 연결된다"
     - "첫 3초에 문제 상황이 제시된다"
     - "장면 연출 인간이 사용할 수 있는 구간 표기가 있다"
+  review_owner: "APOLLO"
+  constraints:
+    language: "ko-KR"
+    external_side_effects: false
   status: "READY"
 
 ---
 kind: "ARTIFACT"
-schema_version: "1.0"
+schema_version: "1.1"
 artifact:
   artifact_id: "ART-SCRIPT-0001"
   project_id: "PRJ-20260903-0001"
@@ -134,10 +145,13 @@ artifact:
   created_by_human: "AP-H001"
   parent_god: "APOLLO"
   model_profile: "WRITER"
-  prompt_version: "1.0.0"
+  prompt_version: "1.1.0"
+  policy_version: "1.1"
+  policy_commit: "<loaded-policy-commit>"
   input_artifacts:
     - "ART-BEATS-0001@v2"
     - "ART-FACTS-0001@v1"
+    - "ART-BRAND-0001@v1"
   created_at: "2026-09-03T11:10:00+09:00"
   sha256: "<calculate-at-save>"
   review:
@@ -148,7 +162,7 @@ artifact:
 
 ---
 kind: "APPROVAL_REQUEST"
-schema_version: "1.0"
+schema_version: "1.1"
 approval_request:
   request_id: "APRQ-0001"
   project_id: "PRJ-20260903-0001"
@@ -156,8 +170,8 @@ approval_request:
   risk_class: "R2"
   action: "YOUTUBE_PUBLISH"
   target: "channel:BoxLogoDev"
-  artifact_id: "ART-VIDEO-0001"
-  artifact_sha256: "<fixed-video-hash>"
+  action_manifest_id: "ACT-YOUTUBE-0001"
+  action_manifest_sha256: "<hash-of-complete-stored-action-manifest>"
   preview_artifact_id: "ART-PREVIEW-0001"
   impact: "유튜브 공개 채널에 숏츠 1개 예약 게시"
   rollback: "예약 시간 전 취소 또는 게시 후 비공개 전환"
@@ -165,16 +179,86 @@ approval_request:
 
 ---
 kind: "APPROVAL_TOKEN"
-schema_version: "1.0"
+schema_version: "1.1"
 approval_token:
   token_id: "APR-0001"
   approved_by: "ZEUS"
   risk_class: "R2"
   action: "YOUTUBE_PUBLISH"
   target: "channel:BoxLogoDev"
-  artifact_id: "ART-VIDEO-0001"
-  artifact_sha256: "<fixed-video-hash>"
+  action_manifest_id: "ACT-YOUTUBE-0001"
+  action_manifest_sha256: "<hash-of-complete-stored-action-manifest>"
   max_executions: 1
   expires_at: "2026-09-04T10:00:00+09:00"
   rollback_required: true
   status: "ACTIVE"
+
+
+
+---
+kind: "ACTION_MANIFEST"
+schema_version: "1.1"
+action_manifest:
+  action_manifest_id: "ACT-YOUTUBE-0001"
+  action: "YOUTUBE_PUBLISH"
+  target: "channel:BoxLogoDev"
+  artifacts:
+    - artifact_id: "ART-VIDEO-0001"
+      version: 1
+      sha256: "<fixed-video-hash>"
+      purpose: "video"
+    - artifact_id: "ART-THUMBNAIL-0001"
+      version: 1
+      sha256: "<fixed-thumbnail-hash>"
+      purpose: "thumbnail"
+  metadata:
+    title: "<reviewed-title>"
+    description: "<reviewed-description>"
+    tags: ["<reviewed-tag>"]
+  visibility: "<reviewed-visibility>"
+  scheduled_at: "<reviewed-ISO8601-time>"
+  timezone: "<existing-channel-timezone>"
+  platform_settings:
+    audience: "<reviewed-audience-setting>"
+    synthetic_content_disclosure: "<reviewed-disclosure-setting>"
+
+---
+kind: "EXECUTION_TEMPLATE"
+schema_version: "1.1"
+execution_template:
+  template_id: "TPL-APOLLO-SHORTS-SCRIPT"
+  version: "1.1.0"
+  parent_god: "APOLLO"
+  single_job: "승인된 비트 시트를 숏츠 대본으로 변환한다"
+  input_contract: ["SHORTS_BEAT_SHEET", "FACT_PACK", "BRAND_RULES"]
+  output_contract: "SHORTS_SCRIPT"
+  workflow: ["입력 버전 확인", "대본 작성", "근거 연결과 낭독 시간 점검", "부모 신에게 검수 제출"]
+  allowed_tools: ["artifact.read", "artifact.write"]
+  forbidden_actions: ["외부 게시", "다른 봇 생성", "새 사실을 임의 추가"]
+  done_when: ["시간 예산 충족", "사실 주장에 근거 연결", "장면 구간 표기"]
+  review_owner: "APOLLO"
+  failure_policy:
+    missing_input: "BLOCKED_INPUT"
+    max_attempts_per_revision: 2
+    max_same_failure_occurrences: 2
+    max_revision_rounds: 2
+    max_total_attempts: 6
+  communication_style: "한국어로 간결하게 사실·가정·미확인을 구분한다"
+
+---
+kind: "ROUTINE_PROPOSAL"
+schema_version: "1.1"
+routine:
+  routine_id: "RTN-EXAMPLE-0001"
+  workflow_version: "1.1.0"
+  status: "DRAFT"
+  input_contract: ["APPROVED_PROJECT_BRIEF"]
+  output_contract: "REVIEWED_DRAFT_PACKAGE"
+  manual_validation_runs: []
+  stop_conditions: ["예산 초과", "예상 밖 사람 개입", "같은 실패 두 번"]
+  review_interval: "<agreed-review-interval>"
+  cost_limit: "<agreed-cost-limit>"
+  failure_notify_target: "HESTIA"
+  disable_procedure: "스케줄러 비활성화 후 진행 중 업무·원격 실행 상태를 대조한다"
+  activation_approval_ref: null
+  # 빈 검증 기록과 승인 참조는 의도적인 미준비 예시다. 예약 활성화하면 안 된다.

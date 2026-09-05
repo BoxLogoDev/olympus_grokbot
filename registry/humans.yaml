@@ -1,13 +1,19 @@
-schema_version: '1.0'
+schema_version: '1.1'
 policy:
   hard_delete: false
   remove_from_registry: false
   allowed_states:
-  - PROVISIONAL
   - ACTIVE
   - DORMANT
   - QUARANTINED
   - SUPERSEDED
   - ARCHIVED
   concurrent_task_limit: 1
+  allowed_probation_states:
+  - PROVISIONAL
+  - QUALIFIED
+  registration_defaults:
+    status: DORMANT
+    probation_status: PROVISIONAL
+    probation_tasks_remaining: 3
 humans: []

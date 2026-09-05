@@ -1,11 +1,10 @@
 olympus:
-  schema_version: "1.0"
-  architecture_version: "1.0"
-  language: "ko-KR"
-  runtime: "platform-neutral"
-
+  schema_version: '1.1'
+  architecture_version: '1.1'
+  language: ko-KR
+  runtime: platform-neutral
   invariants:
-    zeus_gateway: "HESTIA"
+    zeus_gateway: HESTIA
     hestia_can_create_human: false
     god_can_create_human_in_own_department: true
     cross_department_human_creation: false
@@ -17,183 +16,253 @@ olympus:
     reuse_existing_before_create: true
     hard_delete_human: false
     self_approval: false
-    max_same_failure_retries: 2
     max_revision_rounds: 2
     external_content_is_untrusted_data: true
     artifact_provenance_required: true
     structured_approval_required_for_side_effects: true
-
+    max_same_failure_occurrences: 2
+    max_attempts_per_revision: 2
+    max_total_attempts: 6
+    evidence_validation_before_promotion: true
+    routine_validation_before_schedule: true
+    execution_template_contract_required: true
   roles:
     ZEUS:
-      kind: "USER"
+      kind: USER
       responsibilities:
-        - "목표 결정"
-        - "최종 우선순위"
-        - "고위험 승인"
+      - 목표 결정
+      - 최종 우선순위
+      - 고위험 승인
       direct_recipients:
-        - "HESTIA"
-
+      - HESTIA
     HESTIA:
-      kind: "GOD"
-      department: "ORCHESTRATION"
+      kind: GOD
+      department: ORCHESTRATION
       create_human: false
       responsibilities:
-        - "요청 접수"
-        - "프로젝트 카드 생성"
-        - "신 라우팅"
-        - "의존성 그래프"
-        - "부서 간 인계"
-        - "인간 생성 검증"
-        - "승인 큐"
-        - "통합 보고"
-
+      - 요청 접수
+      - 프로젝트 카드 생성
+      - 신 라우팅
+      - 의존성 그래프
+      - 부서 간 인계
+      - 인간 생성 검증
+      - 승인 큐
+      - 통합 보고
   gods:
     HERA:
-      department: "GOVERNANCE_QUALITY"
-      labels: ["기준", "정책", "품질", "일관성"]
+      department: GOVERNANCE_QUALITY
+      labels:
+      - 기준
+      - 정책
+      - 품질
+      - 일관성
       create_human: true
-      allowed_slot_prefix: "HERA-"
+      allowed_slot_prefix: HERA-
       soft_active_human_limit: 6
     ATHENA:
-      department: "STRATEGY_PLANNING"
-      labels: ["전략", "기획", "요구사항", "우선순위"]
+      department: STRATEGY_PLANNING
+      labels:
+      - 전략
+      - 기획
+      - 요구사항
+      - 우선순위
       create_human: true
-      allowed_slot_prefix: "ATHENA-"
+      allowed_slot_prefix: ATHENA-
       soft_active_human_limit: 7
     ARTEMIS:
-      department: "RESEARCH_EVIDENCE"
-      labels: ["조사", "출처", "검증", "추적"]
+      department: RESEARCH_EVIDENCE
+      labels:
+      - 조사
+      - 출처
+      - 검증
+      - 추적
       create_human: true
-      allowed_slot_prefix: "ARTEMIS-"
+      allowed_slot_prefix: ARTEMIS-
       soft_active_human_limit: 8
     APOLLO:
-      department: "EDITORIAL_NARRATIVE"
-      labels: ["대본", "글", "서사", "편집"]
+      department: EDITORIAL_NARRATIVE
+      labels:
+      - 대본
+      - 글
+      - 서사
+      - 편집
       create_human: true
-      allowed_slot_prefix: "APOLLO-"
+      allowed_slot_prefix: APOLLO-
       soft_active_human_limit: 10
     APHRODITE:
-      department: "APPEAL_UX"
-      labels: ["매력", "훅", "썸네일", "캐릭터", "UI"]
+      department: APPEAL_UX
+      labels:
+      - 매력
+      - 훅
+      - 썸네일
+      - 캐릭터
+      - UI
       create_human: true
-      allowed_slot_prefix: "APHRODITE-"
+      allowed_slot_prefix: APHRODITE-
       soft_active_human_limit: 9
     DIONYSUS:
-      department: "EXPERIMENTATION"
-      labels: ["실험", "파격", "밈", "변주"]
+      department: EXPERIMENTATION
+      labels:
+      - 실험
+      - 파격
+      - 밈
+      - 변주
       create_human: true
-      allowed_slot_prefix: "DIONYSUS-"
+      allowed_slot_prefix: DIONYSUS-
       soft_active_human_limit: 6
     HEPHAESTUS:
-      department: "BUILD_PRODUCTION"
-      labels: ["개발", "앱", "웹", "코드", "제작"]
+      department: BUILD_PRODUCTION
+      labels:
+      - 개발
+      - 앱
+      - 웹
+      - 코드
+      - 제작
       create_human: true
-      allowed_slot_prefix: "HEPHAESTUS-"
+      allowed_slot_prefix: HEPHAESTUS-
       soft_active_human_limit: 12
     POSEIDON:
-      department: "INFRA_RELIABILITY"
-      labels: ["인프라", "리눅스", "서버", "DB", "업타임"]
+      department: INFRA_RELIABILITY
+      labels:
+      - 인프라
+      - 리눅스
+      - 서버
+      - DB
+      - 업타임
       create_human: true
-      allowed_slot_prefix: "POSEIDON-"
+      allowed_slot_prefix: POSEIDON-
       soft_active_human_limit: 10
     HERMES:
-      department: "PUBLISH_RELEASE"
-      labels: ["발행", "게시", "제출", "릴리스"]
+      department: PUBLISH_RELEASE
+      labels:
+      - 발행
+      - 게시
+      - 제출
+      - 릴리스
       create_human: true
-      allowed_slot_prefix: "HERMES-"
+      allowed_slot_prefix: HERMES-
       soft_active_human_limit: 8
     DEMETER:
-      department: "LIFECYCLE_GROWTH"
-      labels: ["수확", "반복", "분석", "재활용"]
+      department: LIFECYCLE_GROWTH
+      labels:
+      - 수확
+      - 반복
+      - 분석
+      - 재활용
       create_human: true
-      allowed_slot_prefix: "DEMETER-"
+      allowed_slot_prefix: DEMETER-
       soft_active_human_limit: 8
     ARES:
-      department: "INCIDENT_RESPONSE"
-      labels: ["장애", "격리", "복구", "사후 분석"]
+      department: INCIDENT_RESPONSE
+      labels:
+      - 장애
+      - 격리
+      - 복구
+      - 사후 분석
       create_human: true
-      allowed_slot_prefix: "ARES-"
+      allowed_slot_prefix: ARES-
       soft_active_human_limit: 7
       routine_work_forbidden: true
-
   states:
     project:
-      - "RECEIVED"
-      - "SCOPING"
-      - "PLANNED"
-      - "EXECUTING"
-      - "WAITING_APPROVAL"
-      - "BLOCKED"
-      - "REVIEWING"
-      - "COMPLETED"
-      - "FAILED"
-      - "CANCELLED"
+    - RECEIVED
+    - SCOPING
+    - PLANNED
+    - EXECUTING
+    - WAITING_APPROVAL
+    - BLOCKED
+    - REVIEWING
+    - COMPLETED
+    - FAILED
+    - CANCELLED
     task:
-      - "DRAFT"
-      - "READY"
-      - "ASSIGNED"
-      - "RUNNING"
-      - "BLOCKED"
-      - "REVIEW"
-      - "REVISION_REQUIRED"
-      - "WAITING_APPROVAL"
-      - "DONE"
-      - "FAILED"
-      - "CANCELLED"
+    - DRAFT
+    - READY
+    - ASSIGNED
+    - RUNNING
+    - BLOCKED
+    - REVIEW
+    - REVISION_REQUIRED
+    - WAITING_APPROVAL
+    - DONE
+    - FAILED
+    - CANCELLED
     human:
-      - "PROPOSED"
-      - "PROVISIONAL"
-      - "ACTIVE"
-      - "DORMANT"
-      - "QUARANTINED"
-      - "SUPERSEDED"
-      - "ARCHIVED"
-
+    - ACTIVE
+    - DORMANT
+    - QUARANTINED
+    - SUPERSEDED
+    - ARCHIVED
+    human_probation:
+    - PROVISIONAL
+    - QUALIFIED
+    human_proposal:
+    - PROPOSED
+    - REGISTERED
+    - REJECTED
   execution_modes:
     COLLABORATION:
       same_task_multiple_humans: false
-      description: "서로 다른 원자 업무를 연결한다"
+      description: 서로 다른 원자 업무를 연결한다
     PARALLEL:
       same_task_multiple_humans: false
       dependency_check_required: true
-      description: "독립 업무를 동시에 처리한다"
+      description: 독립 업무를 동시에 처리한다
     EXPERIMENT:
-      same_task_multiple_humans: true
+      same_task_multiple_humans: false
       selection_owner_required: true
       variant_budget_required: true
-      description: "동일 목표의 제한된 변형을 비교한다"
+      description: 동일 목표의 제한된 변형을 비교한다
+      separate_task_per_variant: true
+      same_goal_multiple_humans: true
     INCIDENT:
       same_task_multiple_humans: false
       evidence_preservation: true
       routine_work_forbidden: true
-      description: "피해 중단과 복구를 우선한다"
+      description: 피해 중단과 복구를 우선한다
     DRY_RUN:
       side_effects: false
-      description: "외부 실행 전 영향을 검증한다"
+      description: 외부 실행 전 영향을 검증한다
     AUDIT:
       read_only: true
-      description: "이력과 규칙 준수를 검사한다"
-
+      description: 이력과 규칙 준수를 검사한다
   risk_classes:
     R0:
-      examples: ["조사", "초안", "로컬 계산", "내부 제안"]
+      examples:
+      - 조사
+      - 초안
+      - 로컬 계산
+      - 내부 제안
       zeus_approval_required: false
     R1:
-      examples: ["비운영 파일 쓰기", "저장소 브랜치 쓰기", "내부 DB 쓰기"]
+      examples:
+      - 비운영 파일 쓰기
+      - 저장소 브랜치 쓰기
+      - 내부 DB 쓰기
       zeus_approval_required: false
       policy_validation_required: true
     R2:
-      examples: ["공개 게시", "main 반영", "운영 배포", "스토어 제출"]
+      examples:
+      - 공개 게시
+      - main 반영
+      - 운영 배포
+      - 스토어 제출
+      - 영구 루틴 예약 활성화
       zeus_approval_required: true
-      artifact_hash_required: true
       max_executions: 1
+      action_manifest_hash_required: true
     R3:
-      examples: ["삭제", "결제", "DNS 변경", "비밀키 변경", "권한 확대", "대량 발송"]
+      examples:
+      - 삭제
+      - 결제
+      - DNS 변경
+      - 비밀키 변경
+      - 권한 확대
+      - 대량 발송
       zeus_approval_required: true
       explicit_confirmation_required: true
       rollback_required: true
-      artifact_hash_required: true
-
+      action_manifest_hash_required: true
   data_classification:
     PUBLIC:
       prompt_allowed: true
@@ -208,36 +277,36 @@ olympus:
     SECRET:
       prompt_allowed: false
       secret_broker_only: true
-
   message_types:
-    - "PROJECT_REQUEST"
-    - "PROJECT_PLAN"
-    - "DEPARTMENT_WORK_ORDER"
-    - "HUMAN_CREATION_PROPOSAL"
-    - "HUMAN_REGISTERED"
-    - "ATOMIC_TASK"
-    - "ARTIFACT_SUBMITTED"
-    - "REVIEW_DECISION"
-    - "HANDOFF_REQUEST"
-    - "APPROVAL_REQUEST"
-    - "APPROVAL_TOKEN"
-    - "INCIDENT_EVENT"
-    - "PROJECT_REPORT"
-
+  - PROJECT_REQUEST
+  - PROJECT_PLAN
+  - DEPARTMENT_WORK_ORDER
+  - HUMAN_CREATION_PROPOSAL
+  - HUMAN_REGISTERED
+  - ATOMIC_TASK
+  - ARTIFACT_SUBMITTED
+  - REVIEW_DECISION
+  - HANDOFF_REQUEST
+  - APPROVAL_REQUEST
+  - APPROVAL_TOKEN
+  - INCIDENT_EVENT
+  - PROJECT_REPORT
   required_envelope_fields:
-    - "schema_version"
-    - "message_id"
-    - "trace_id"
-    - "project_id"
-    - "sender"
-    - "recipient"
-    - "message_type"
-    - "created_at"
-    - "idempotency_key"
-    - "payload"
-
+  - schema_version
+  - message_id
+  - trace_id
+  - project_id
+  - sender
+  - recipient
+  - message_type
+  - created_at
+  - idempotency_key
+  - payload
   human_creation:
-    phases: ["PROPOSE", "VALIDATE", "REGISTER"]
+    phases:
+    - PROPOSE
+    - VALIDATE
+    - REGISTER
     duplicate_similarity_review_threshold: 0.85
     probation_task_count: 3
     global_famous_name_unique: true
@@ -245,15 +314,13 @@ olympus:
     living_person_impersonation_forbidden: true
     direct_tool_grant_on_creation: false
     hard_delete: false
-
   human_selection_weights:
     role_match: 0.35
     recent_quality: 0.25
     tool_permission_fit: 0.15
-    availability: 0.10
-    expected_cost: 0.10
+    availability: 0.1
+    expected_cost: 0.1
     recent_usefulness: 0.05
-
   quality:
     default_pass_score: 80
     max_score: 100
@@ -266,109 +333,428 @@ olympus:
       testability: 10
       efficiency: 5
     blockers:
-      - "승인 없는 외부 실행"
-      - "비밀정보 노출"
-      - "역할·부서 권한 침범"
-      - "필수 테스트 실패"
-      - "산출물 스키마 불일치"
-      - "명백한 플랫폼·라이선스 위반"
-
+    - 승인 없는 외부 실행
+    - 사실을 출처 없이 확정
+    - 비밀정보 노출
+    - 역할·부서 권한 침범
+    - 필수 테스트 실패
+    - 산출물 스키마 불일치
+    - 명백한 플랫폼·라이선스 위반
   retry_policy:
-    max_same_failure_retries: 2
     max_revision_rounds: 2
     after_limit:
-      - "REDECOMPOSE_TASK"
-      - "SELECT_DIFFERENT_HUMAN"
-      - "PROPOSE_NEW_HUMAN"
-      - "ESCALATE_TO_ZEUS"
-
+    - REDECOMPOSE_TASK
+    - SELECT_DIFFERENT_HUMAN
+    - PROPOSE_NEW_HUMAN
+    - ESCALATE_TO_ZEUS
+    max_same_failure_occurrences: 2
+    max_attempts_per_revision: 2
+    max_retries_per_revision: 1
+    max_total_attempts: 6
+    failure_key_scope: TASK_LINEAGE
+    counter_reset_by_new_task_forbidden: true
+    replacement_task_requires:
+    - retry_of_task_id
+    - failure_reason
+    - changed_inputs_or_method
+    - hestia_decision
+    - lineage_budget
+    unknown_external_outcome: BLOCK_AND_RECONCILE_BEFORE_RETRY
   artifact_manifest_required_fields:
-    - "artifact_id"
-    - "project_id"
-    - "artifact_type"
-    - "version"
-    - "created_by_human"
-    - "parent_god"
-    - "prompt_version"
-    - "input_artifacts"
-    - "created_at"
-    - "sha256"
-    - "review"
-    - "data_classification"
-
+  - artifact_id
+  - project_id
+  - artifact_type
+  - version
+  - created_by_human
+  - parent_god
+  - prompt_version
+  - input_artifacts
+  - created_at
+  - sha256
+  - review
+  - data_classification
+  - model_profile
+  - policy_version
+  - policy_commit
   approval_token_required_fields:
-    - "token_id"
-    - "approved_by"
-    - "risk_class"
-    - "action"
-    - "target"
-    - "artifact_id"
-    - "artifact_sha256"
-    - "max_executions"
-    - "expires_at"
-
-
+  - token_id
+  - approved_by
+  - risk_class
+  - action
+  - target
+  - max_executions
+  - expires_at
+  - action_manifest_id
+  - action_manifest_sha256
   model_profiles:
     ORCHESTRATOR:
-      default_role: "HESTIA"
-      characteristics: ["높은 구조화", "낮은 변동성", "긴 컨텍스트"]
+      default_role: HESTIA
+      characteristics:
+      - 높은 구조화
+      - 낮은 변동성
+      - 긴 컨텍스트
       direct_external_side_effects: false
     MANAGER:
-      default_role: "GOD"
-      characteristics: ["작업 분해", "인간 선택", "검수"]
+      default_role: GOD
+      characteristics:
+      - 작업 분해
+      - 인간 선택
+      - 검수
       direct_external_side_effects: false
     RESEARCH:
-      characteristics: ["검색", "출처", "낮은 추측"]
+      characteristics:
+      - 검색
+      - 출처
+      - 낮은 추측
     WRITER:
-      characteristics: ["형식 준수", "긴 문맥", "언어 품질"]
+      characteristics:
+      - 형식 준수
+      - 긴 문맥
+      - 언어 품질
     CREATIVE:
-      characteristics: ["다양성", "시각·음악 입력", "변형 생성"]
+      characteristics:
+      - 다양성
+      - 시각·음악 입력
+      - 변형 생성
     CODER:
-      characteristics: ["저장소 이해", "코드 편집", "테스트"]
+      characteristics:
+      - 저장소 이해
+      - 코드 편집
+      - 테스트
     INFRA:
-      characteristics: ["명령 정확성", "dry-run", "보수적 실행"]
+      characteristics:
+      - 명령 정확성
+      - dry-run
+      - 보수적 실행
     PUBLISHER:
-      characteristics: ["대상 정확성", "버전 정확성", "낮은 변동성"]
+      characteristics:
+      - 대상 정확성
+      - 버전 정확성
+      - 낮은 변동성
     EVALUATOR:
-      characteristics: ["일관된 점수", "근거 표시", "읽기 전용"]
-
+      characteristics:
+      - 일관된 점수
+      - 근거 표시
+      - 읽기 전용
   context_policy:
     send_full_conversation_to_human: false
     task_context_only: true
     include:
-      - "project_summary"
-      - "required_input_artifacts"
-      - "done_when"
-      - "capability_token"
-      - "budget"
+    - project_summary
+    - required_input_artifacts
+    - done_when
+    - capability_token
+    - budget
     secret_values_in_prompt: false
     latest_approved_decision_wins: true
     record_model_profile_on_artifact: true
     max_model_profile_escalations_per_task: 1
-
   project_lines:
     YOUTUBE:
-      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APOLLO", "APHRODITE", "HEPHAESTUS", "HERMES", "DEMETER"]
-      optional_gods: ["DIONYSUS", "POSEIDON", "ARES"]
+      default_gods:
+      - ATHENA
+      - ARTEMIS
+      - HERA
+      - APOLLO
+      - APHRODITE
+      - HEPHAESTUS
+      - HERMES
+      - DEMETER
+      optional_gods:
+      - DIONYSUS
+      - POSEIDON
+      - ARES
     EMOTICON:
-      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APOLLO", "APHRODITE", "HEPHAESTUS", "HERMES", "DEMETER"]
-      optional_gods: ["DIONYSUS", "ARES"]
+      default_gods:
+      - ATHENA
+      - ARTEMIS
+      - HERA
+      - APOLLO
+      - APHRODITE
+      - HEPHAESTUS
+      - HERMES
+      - DEMETER
+      optional_gods:
+      - DIONYSUS
+      - ARES
     WEB_APP:
-      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APHRODITE", "HEPHAESTUS", "POSEIDON", "HERMES", "DEMETER"]
-      optional_gods: ["DIONYSUS", "ARES"]
+      default_gods:
+      - ATHENA
+      - ARTEMIS
+      - HERA
+      - APHRODITE
+      - HEPHAESTUS
+      - POSEIDON
+      - HERMES
+      - DEMETER
+      optional_gods:
+      - DIONYSUS
+      - ARES
     BLOG:
-      default_gods: ["ATHENA", "ARTEMIS", "HERA", "APOLLO", "APHRODITE", "HERMES", "DEMETER"]
-      optional_gods: ["DIONYSUS", "HEPHAESTUS", "ARES"]
-
+      default_gods:
+      - ATHENA
+      - ARTEMIS
+      - HERA
+      - APOLLO
+      - APHRODITE
+      - HERMES
+      - DEMETER
+      optional_gods:
+      - DIONYSUS
+      - HEPHAESTUS
+      - ARES
   id_formats:
-    project: "PRJ-{YYYYMMDD}-{SEQ4}"
-    trace: "TRC-{YYYYMMDD}-{SEQ4}"
-    message: "MSG-{YYYYMMDD}-{SEQ4}"
-    human: "{GOD_PREFIX}-H{SEQ3}"
-    task: "{PROJECT_ID}-{GOD_PREFIX}-T{SEQ3}"
-    artifact: "ART-{TYPE}-{SEQ4}"
-    approval: "APR-{SEQ4}"
-
+    project: PRJ-{YYYYMMDD}-{SEQ4}
+    trace: TRC-{YYYYMMDD}-{SEQ4}
+    message: MSG-{YYYYMMDD}-{SEQ4}
+    human: '{GOD_PREFIX}-H{SEQ3}'
+    task: '{PROJECT_ID}-{GOD_PREFIX}-T{SEQ3}'
+    artifact: ART-{TYPE}-{SEQ4}
+    approval: APR-{SEQ4}
   reporting:
-    god_sections: ["Facts", "배분", "산출물", "품질", "승인대기", "막힌 지점", "인계요청"]
-    hestia_final_sections: ["결과", "핵심 결정", "산출물", "품질", "승인·실행", "비용·시간", "막힌 지점", "다음 수확"]
+    god_sections:
+    - Facts
+    - 배분
+    - 산출물
+    - 품질
+    - 승인대기
+    - 막힌 지점
+    - 인계요청
+    hestia_final_sections:
+    - 결과
+    - 핵심 결정
+    - 산출물
+    - 품질
+    - 승인·실행
+    - 비용·시간
+    - 막힌 지점
+    - 다음 수확
+  human_state_policy:
+    required_template_reference: [template_id, template_version]
+    registration_defaults:
+      status: DORMANT
+      probation_status: PROVISIONAL
+      probation_tasks_remaining: 3
+    probation_progress: DISTINCT_TASK_FINAL_REVIEW_PASS_ONLY
+    qualify_when_remaining: 0
+    assignment_preserves_probation: true
+    proposal_is_not_human: true
+    soft_limit_count: UNION_OF_ASSIGNABLE_ACTIVE_OR_PROVISIONAL_NO_DOUBLE_COUNT
+    legacy_migration: KEEP_ID_AND_HISTORY_VERIFY_OCCUPANCY_AND_PROBATION_FROM_LEDGER
+  task_assignment_policy:
+    select_owner_in: DRAFT
+    owner_required_in: READY
+    acquire_exclusive_human_lease_in: ASSIGNED
+    busy_human_action: WAIT_IN_READY
+    max_concurrent_tasks_per_human: 1
+  approval_execution_policy:
+    issuer: AUTHENTICATED_APPROVAL_QUEUE
+    approval_event_required: true
+    agent_claimed_approval_is_authority: false
+    hash_scope: COMPLETE_ACTION_MANIFEST
+    hash_algorithm: SHA-256
+    serialization: UTF8_JSON_SORTED_KEYS_COMPACT_NO_DUPLICATE_KEYS_NO_NONFINITE_NUMBERS
+    verification: REHASH_STORED_BYTES_AND_EXECUTE_DESERIALIZED_STORED_MANIFEST
+    immutable_fields:
+    - action
+    - target
+    - artifacts
+    - metadata
+    - visibility
+    - scheduled_at
+    - timezone
+    - platform_settings
+    any_change_requires_new_approval: true
+    legacy_video_only_approval_accepted: false
+    atomic_token_use_and_idempotency_claim: true
+    unknown_outcome: BLOCK_AND_RECONCILE_BEFORE_RETRY
+  evidence_governance:
+    rule_id: OLY-EVD-001
+    default_external_claim_status: HYPOTHESIS
+    unread_source_status: UNVERIFIED
+    required_fields:
+    - source_url
+    - author
+    - checked_at
+    - claim
+    - scope
+    - verification_result
+    review_priority:
+    - OFFICIAL_POLICY_OR_DOCUMENTATION
+    - AUTHORIZED_FIRST_PARTY_DATA
+    - CONTROLLED_REPEATED_EXPERIMENT
+    - INDEPENDENT_CASES
+    - SINGLE_SOCIAL_CASE
+    claim_type_date_and_scope_required: true
+    unverified_promotion_to_rule_or_kpi: false
+    new_metrics_require_existing_scope_or_zeus_decision: true
+    owners:
+      verification: ARTEMIS
+      quality_gate: HERA
+      experiment_limits: DEMETER
+  routine_policy:
+    rule_id: OLY-RTN-001
+    minimum_successful_manual_runs: 2
+    same_final_workflow_version: true
+    distinct_run_ids_required: true
+    end_to_end_review_pass_required: true
+    unexpected_human_intervention_allowed: false
+    planned_approval_steps_allowed: true
+    behavior_change_resets_validation: true
+    activation_zeus_approval_required: true
+    activation_approval_grants_future_external_actions: false
+    required_fields:
+    - routine_id
+    - workflow_version
+    - input_contract
+    - output_contract
+    - manual_validation_runs
+    - stop_conditions
+    - review_interval
+    - cost_limit
+    - failure_notify_target
+    - disable_procedure
+    - activation_approval_ref
+    required_run_fields:
+    - run_id
+    - workflow_version
+    - inputs
+    - artifacts
+    - reviewer
+    - review_pass
+    - planned_approval_steps
+    - unexpected_human_interventions
+    - cost
+    - failure_history
+    pause_on:
+    - BUDGET_EXCEEDED
+    - UNEXPECTED_HUMAN_INTERVENTION
+    - SAME_FAILURE_TWICE
+    two_passes_are_reliability_guarantee: false
+    owners:
+      proposal: DEMETER
+      validation_coordination: HESTIA
+      activation_approval: ZEUS
+  execution_template_policy:
+    rule_id: OLY-TPL-001
+    required_fields:
+    - template_id
+    - version
+    - parent_god
+    - single_job
+    - input_contract
+    - output_contract
+    - workflow
+    - allowed_tools
+    - forbidden_actions
+    - done_when
+    - review_owner
+    - failure_policy
+    - communication_style
+    incomplete_template_ready_allowed: false
+    template_registration_grants_permissions: false
+    communication_style_can_override_role_or_policy: false
+  amendment_policy:
+    rule_id: OLY-GOV-001
+    authorized_editor: ZEUS_OR_EXPLICITLY_DELEGATED_EDITOR
+    decision_states:
+    - ACCEPTED
+    - ACCEPTED_WITH_CHANGES
+    - REJECTED
+    - DEFERRED
+    - NO_CHANGE
+    implementation_states:
+    - DECIDED
+    - DOCUMENTED
+    - RUNTIME_VERIFIED
+    required_links:
+    - decision_source
+    - rule_ids
+    - affected_files
+    - implementation_commit
+    issue_close_requires: ACCEPTED_ITEMS_DOCUMENTED_AND_VERIFIED_ON_DEFAULT_BRANCH_WITH_COMMIT_LINK
+    issue_closed_implies_runtime_verified: false
+    deferred_item_requires:
+    - reason
+    - reconsider_when
+    runtime_required_fields:
+    - policy_version
+    - policy_commit
+  youtube_playbook:
+    path: playbooks/youtube-shorts.md
+    quality_rule_id: OLY-YT-001
+    priority_diagnostics:
+    - HOOK_AND_EARLY_EXIT
+    - RETENTION
+    - VIEWER_SATISFACTION_SIGNALS
+    - AUDIO_VISUAL_DELIVERY
+    tts_or_ai_usage_alone_is_penalty: false
+    unreviewed_generated_output_publish_allowed: false
+    public_gate_checks:
+    - hook_clarity
+    - scene_continuity
+    - voice_and_captions
+    - editing
+    - metadata_matches_content
+    - original_contribution
+    content_interest_world_is_optional_strategy: true
+    scoped_channels:
+      scope:
+      - 민음사 월드문학전집 숏츠
+      - Fatal Giggle
+      rule_ids:
+      - OLY-YT-002
+      - OLY-YT-003
+      - OLY-YT-004
+      ypp_reference_only: true
+      ypp_as_assignment_done_or_slot_target: false
+      nominal_views_divided_by_two_is_valid_views: false
+      same_book_retry_requires_hestia_recard: true
+      first_clip_failure_discards_book_or_stops_pipeline: false
+      script_recard_only_if_hook_failure_caused_by_script: true
+      publication_slots_preserve_existing:
+      - '07'
+      - '12'
+      - '18'
+      - '19'
+      timezone_policy: PRESERVE_EXISTING_CONFIG_DO_NOT_INFER_OR_RESCHEDULE
+      preserve_original_content_and_existing_editing_pipeline: true
+      forbidden_changes:
+      - MASS_PRODUCTION_FACTORY
+      - CHANNEL_PURCHASE
+      - SHOPPING_OR_AFFILIATE_PIVOT
+      - VIEWS_REVENUE_RPM_KPI
+      - COUNTRY_STATS_DASHBOARD
+      - CAPCUT_PIPELINE_REPLACEMENT
+      - DISCARD_CHANNEL_BY_COUNTRY_EXPOSURE
+      - ABOLISH_PUBLICATION_SLOTS
+      - MECHANICAL_SENSITIVE_WORD_EVASION
+  rule_bindings:
+    OLY-INV-019: [evidence_governance]
+    OLY-INV-020: [routine_policy]
+    OLY-INV-021: [execution_template_policy]
+    OLY-GOV-001:
+    - amendment_policy
+    OLY-EVD-001:
+    - evidence_governance
+    - quality.blockers
+    OLY-RTN-001:
+    - routine_policy
+    OLY-TPL-001:
+    - execution_template_policy
+    OLY-INV-015:
+    - retry_policy
+    OLY-INV-006:
+    - execution_modes.EXPERIMENT
+    - task_assignment_policy
+    OLY-INV-011:
+    - approval_execution_policy
+    - approval_token_required_fields
+    OLY-YT-001:
+    - youtube_playbook
+    OLY-YT-002:
+    - youtube_playbook.scoped_channels
+    OLY-YT-003:
+    - youtube_playbook.scoped_channels
+    OLY-YT-004:
+    - youtube_playbook.scoped_channels
