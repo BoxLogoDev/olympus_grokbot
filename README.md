@@ -9,16 +9,17 @@
 제우스가 목표를 말하면 헤스티아가 프로젝트를 조직하고,  
 신들이 자기 부서의 전문 인간 에이전트를 선택하거나 생성해 결과를 만든다.
 
-[![Architecture](https://img.shields.io/badge/architecture-v1.1-6C63FF?style=for-the-badge)](./OLYMPUS_Agent_Architecture_v1.1.md)
+[![Architecture](https://img.shields.io/badge/architecture-v1.2-6C63FF?style=for-the-badge)](./OLYMPUS_Agent_Architecture_v1.2.md)
 [![Status](https://img.shields.io/badge/status-implementation%20baseline-2E8B57?style=for-the-badge)](#-현재-상태)
 [![Language](https://img.shields.io/badge/language-Korean-0A66C2?style=for-the-badge)](#-공통-운영-규칙)
-[![Project Lines](https://img.shields.io/badge/project%20lines-4-FF6B35?style=for-the-badge)](#-네-가지-프로젝트-라인)
+[![Project Lines](https://img.shields.io/badge/project%20lines-5-FF6B35?style=for-the-badge)](#-다섯-가지-프로젝트-라인)
 [![Human Delete](https://img.shields.io/badge/human%20hard%20delete-forbidden-B22222?style=for-the-badge)](#-인간은-삭제하지-않는다)
 
-[**v1.1 전체 설계서**](./OLYMPUS_Agent_Architecture_v1.1.md) ·
-[**봇 프롬프트**](./prompts/OLYMPUS_Bot_Prompts_v1.1.md) ·
+[**v1.2 전체 설계서**](./OLYMPUS_Agent_Architecture_v1.2.md) ·
+[**봇 프롬프트**](./prompts/OLYMPUS_Bot_Prompts_v1.2.md) ·
 [**YAML 계약**](./spec/olympus-contracts-v1.yaml) ·
 [**이슈 채택 기록**](./docs/decisions/2026-09-05-issues-1-2.md) ·
+[**밤 캐릭터 파이프라인**](./playbooks/character-production.md) ·
 [**유튜브 운영 기준**](./playbooks/youtube-shorts.md) ·
 [**v1.0 기록**](./OLYMPUS_Agent_Architecture_v1.0.md) ·
 [**v0.4 기록**](./OLYMPUS_Agent_Architecture_v0.4.md)
@@ -77,15 +78,15 @@ flowchart TB
 
 ---
 
-## ✨ v1.1에서 강화된 것
+## ✨ v1.2에서 추가된 것
 
-v1.0의 구조를 유지하면서 이슈 #1·#2의 채택 조항과 계약 불일치를 반영했다.
+- **캐릭터 공통 제작 라인** — 원형 정의 → 승인 → 표정·직업·동작 제작 → 검수 → 자산 등록
+- **밤 캐릭터 등록** — 기본형·얼굴 후보와 직업별 36종 참고 자료; 원형은 승인 대기
+- **원형 보존과 계보** — 기준 원화의 버전·해시 고정, 파생 결과의 자동 원형 승격 금지
+- **단일 직무 슬롯 3개** — 원형 명세·정지 이미지·짧은 동작 제작; 전체 89개 슬롯
+- **기존 라인 연결** — 승인 자산을 유튜브·이모티콘·웹·블로그에서 재사용
 
-- **개정 추적** — 채택·문서 반영·실행 검증을 구분하고 반영 커밋을 이슈에 연결
-- **근거 검증** — SNS·수익·알고리즘 주장은 검증 전 가설, 원문 미확인은 보류
-- **루틴 검증** — 같은 최종 버전의 수동 성공 2회와 중단 조건·활성화 승인
-- **실행 템플릿** — 직무·입출력·워크플로·도구·완료조건·검수·실패 처리
-- **계약 정합성** — 시험 여부와 가동 상태 분리, 업무 점유, 재시도 횟수, 게시 매니페스트 승인
+v1.1의 이슈 #1·#2 채택, 근거 검증, 루틴 검증, 실행 템플릿, 업무 점유·재시도·게시 매니페스트 계약은 유지한다.
 
 아래 v1.0의 기반 설계도 유지한다.
 
@@ -103,7 +104,7 @@ v1.0의 구조를 유지하면서 이슈 #1·#2의 채택 조항과 계약 불�
 
 ---
 
-## 🎯 네 가지 프로젝트 라인
+## 🎯 다섯 가지 프로젝트 라인
 
 | 프로젝트 | 대표 결과물 | 기본 흐름 |
 |---|---|---|
@@ -111,6 +112,7 @@ v1.0의 구조를 유지하면서 이슈 #1·#2의 채택 조항과 계약 불�
 | 💬 **이모티콘** | 캐릭터, 표정·동작, 문구, 규격 파일, 제출 | 상품 정의 → 플랫폼 조사 → 캐릭터 → 문구 → 제작 → 검수 → 제출 |
 | 💻 **웹·앱** | 요구사항, UI, 코드, 테스트, 인프라, 릴리스 | 문제 정의 → 요구사항 → 구현 → 테스트 → 인프라 → 승인 → 릴리스 |
 | ✍️ **블로그** | 조사, 아웃라인, 원고, 대표 이미지, 게시, 갱신 | 목적 → 자료 → 구조 → 집필 → 편집 → 검수 → 게시 → 재활용 |
+| 🌰 **캐릭터** | 원형 명세, 표정·직업 변형, 정지 이미지, 짧은 동작, 자산 카탈로그 | 원본 → 원형 승인 → 제작 → 일관성 검수 → 재사용 |
 
 모든 프로젝트가 모든 신을 호출하지 않는다. 헤스티아가 목표와 위험에 맞는 신만 선택한다.
 
@@ -227,6 +229,7 @@ HUMAN_HARD_DELETE = false
 16. 외부 사례는 검증 전 보편 규칙·KPI로 승격하지 않는다.
 17. 루틴 예약 전 같은 최종 버전으로 수동 검증 2회와 활성화 승인을 확인한다.
 18. 실행 템플릿에는 워크플로·입출력·도구·완료조건·검수·실패 처리가 있어야 한다.
+19. 캐릭터 원형은 제우스 승인으로 확정하고 파생 자산은 원형의 버전·해시를 따른다. 원형 승인은 외부 공개 승인을 대신하지 않는다.
 
 ---
 
@@ -298,33 +301,45 @@ olympus_grokbot/
 ├── OLYMPUS_Agent_Architecture_v0.4.md
 ├── OLYMPUS_Agent_Architecture_v1.0.md
 ├── OLYMPUS_Agent_Architecture_v1.1.md
+├── OLYMPUS_Agent_Architecture_v1.2.md
 ├── prompts/
 │   ├── OLYMPUS_Bot_Prompts_v1.0.md
-│   └── OLYMPUS_Bot_Prompts_v1.1.md
+│   ├── OLYMPUS_Bot_Prompts_v1.1.md
+│   └── OLYMPUS_Bot_Prompts_v1.2.md
 ├── spec/
 │   └── olympus-contracts-v1.yaml
 ├── registry/
 │   ├── slots.yaml
 │   └── humans.yaml
 ├── playbooks/
-│   └── youtube-shorts.md
+│   ├── youtube-shorts.md
+│   └── character-production.md
+├── characters/bam/
+│   └── character.yaml
 ├── docs/decisions/
-│   └── 2026-09-05-issues-1-2.md
+│   ├── 2026-09-05-issues-1-2.md
+│   └── 2026-09-05-bam-pipeline.md
 └── templates/
-    └── contracts.example.yaml
+    ├── contracts.example.yaml
+    └── character-production.yaml
 ```
 
 | 파일 | 설명 |
 |---|---|
-| [`OLYMPUS_Agent_Architecture_v1.1.md`](./OLYMPUS_Agent_Architecture_v1.1.md) | 권한, 상태, 메시지, 품질, 보안, 파이프라인을 포함한 구현 기준선 |
-| [`prompts/OLYMPUS_Bot_Prompts_v1.1.md`](./prompts/OLYMPUS_Bot_Prompts_v1.1.md) | 헤스티아와 11신, 인간 생성 템플릿의 실제 설정문 |
+| [`OLYMPUS_Agent_Architecture_v1.2.md`](./OLYMPUS_Agent_Architecture_v1.2.md) | 권한, 상태, 메시지, 품질, 보안, 파이프라인을 포함한 구현 기준선 |
+| [`prompts/OLYMPUS_Bot_Prompts_v1.2.md`](./prompts/OLYMPUS_Bot_Prompts_v1.2.md) | 헤스티아와 11신, 인간 생성 템플릿의 실제 설정문 |
 | [`spec/olympus-contracts-v1.yaml`](./spec/olympus-contracts-v1.yaml) | 불변 규칙, 상태, 승인, 라우팅을 담은 기계 판독형 계약 |
-| [`registry/slots.yaml`](./registry/slots.yaml) | 11개 부서의 인간 슬롯 86개를 담은 초기 레지스트리 |
+| [`registry/slots.yaml`](./registry/slots.yaml) | 11개 부서의 인간 슬롯 89개를 담은 초기 레지스트리 |
 | [`registry/humans.yaml`](./registry/humans.yaml) | 삭제 없는 인간 인스턴스 레지스트리의 초기 빈 상태 |
 | [`templates/contracts.example.yaml`](./templates/contracts.example.yaml) | 프로젝트, 인간 생성, 업무, 산출물, 승인 계약 예시 |
 | [`playbooks/youtube-shorts.md`](./playbooks/youtube-shorts.md) | 유튜브 진단·공개 품질·채널별 보존 규칙 |
 | [`docs/decisions/2026-09-05-issues-1-2.md`](./docs/decisions/2026-09-05-issues-1-2.md) | 항목별 채택·기각·보류와 적용 추적 |
-| [`OLYMPUS_Agent_Architecture_v1.0.md`](./OLYMPUS_Agent_Architecture_v1.0.md) | 이전 기준선; 실행 시 v1.1을 사용 |
+| [`playbooks/character-production.md`](./playbooks/character-production.md) | 캐릭터 제작 DAG·검수·기존 라인 연결·밤 파일럿 |
+| [`characters/bam/character.yaml`](./characters/bam/character.yaml) | 밤의 이름·원본 해시·원형 후보·직업별 36종 변형 |
+| [`templates/character-production.yaml`](./templates/character-production.yaml) | 신규 3개 슬롯의 단일 직무 실행 계약 |
+| [`docs/decisions/2026-09-05-bam-pipeline.md`](./docs/decisions/2026-09-05-bam-pipeline.md) | 캐릭터 라인 추가 범위와 승인·실행 상태 |
+| [`OLYMPUS_Agent_Architecture_v1.1.md`](./OLYMPUS_Agent_Architecture_v1.1.md) | 이슈 #1·#2가 반영된 이전 기준선 |
+| [`OLYMPUS_Agent_Architecture_v1.0.md`](./OLYMPUS_Agent_Architecture_v1.0.md) | 이전 기준선; 실행 시 v1.2를 사용 |
 | [`OLYMPUS_Agent_Architecture_v0.4.md`](./OLYMPUS_Agent_Architecture_v0.4.md) | 초기 설계 기록 |
 
 ---
@@ -340,10 +355,12 @@ olympus_grokbot/
 - [x] 유튜브·이모티콘·웹/앱·블로그 파이프라인
 - [x] 신별 실제 봇 프롬프트
 - [x] 기계 판독형 YAML 기준
-- [x] 86개 인간 슬롯의 초기 레지스트리
+- [x] 89개 인간 슬롯의 초기 레지스트리
 - [x] 프로젝트·업무·승인 계약 예시
 - [x] 이슈 #1·#2 문서 반영과 v1.1 계약 정합성 수정
-- [ ] v1.1 실행 환경 로드·수용 테스트
+- [x] 밤 캐릭터 라인·원형 계보 계약·제작 템플릿 추가
+- [ ] 밤 원형 승인과 첫 표정·타이핑 동작 제작
+- [ ] v1.2 실행 환경 로드·수용 테스트
 - [ ] YAML 스키마 검증기
 - [ ] 헤스티아 라우터와 DAG 실행기
 - [ ] 인간 레지스트리 검색·점수화
@@ -353,7 +370,7 @@ olympus_grokbot/
 
 ---
 
-문서 반영 완료는 실제 봇 설정·라우터·승인 큐의 적용 완료를 뜻하지 않는다. v1.1은 인간 상태와 승인 계약을 변경하므로 기존 실행기는 [v1.1 헌법](./OLYMPUS_Agent_Architecture_v1.1.md)에 따라 정책 버전을 고정하고 마이그레이션·수용 테스트를 거쳐야 한다. `registry/humans.yaml`은 초기 빈 레지스트리로 유지하며 인간·루틴을 새로 활성화하지 않는다.
+문서 반영 완료는 실제 봇 설정·라우터·승인 큐의 적용 완료를 뜻하지 않는다. v1.2는 v1.1의 인간 상태·승인 계약에 캐릭터 원형·파생 계약을 추가하므로 기존 실행기는 [v1.2 헌법](./OLYMPUS_Agent_Architecture_v1.2.md)에 따라 정책 버전을 고정하고 마이그레이션·수용 테스트를 거쳐야 한다. `registry/humans.yaml`은 초기 빈 레지스트리로 유지하며 인간·루틴을 새로 활성화하지 않는다.
 
 ## 💡 설계 철학
 
@@ -372,8 +389,8 @@ olympus_grokbot/
 
 Designed by **[BoxLogoDev](https://github.com/BoxLogoDev)**
 
-[전체 아키텍처](./OLYMPUS_Agent_Architecture_v1.1.md) ·
-[봇 프롬프트](./prompts/OLYMPUS_Bot_Prompts_v1.1.md) ·
+[전체 아키텍처](./OLYMPUS_Agent_Architecture_v1.2.md) ·
+[봇 프롬프트](./prompts/OLYMPUS_Bot_Prompts_v1.2.md) ·
 [YAML 계약](./spec/olympus-contracts-v1.yaml)
 
 </div>

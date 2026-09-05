@@ -1,0 +1,153 @@
+schema_version: '1.2'
+status: DESIGN_ONLY
+runtime_enabled: false
+tool_names_are_capability_labels: true
+tool_binding_policy: 실행 환경에서 실제 도구·버전·참조 입력 지원을 확인해 업무별 권한에 연결한다
+worker_registration_policy: 기존 인간 검색 후 필요 시 생성·검증·등록; 템플릿 자체는 인간이나 권한이 아님
+templates:
+- template_id: TPL-APHRODITE-CHARACTER-CANON
+  version: 1.0.0
+  slot_id: APHRODITE-CHARACTER-CANON
+  parent_god: APHRODITE
+  single_job: 사용자 원화에서 매체 공통 캐릭터 원형 명세를 작성한다
+  input_contract:
+  - USER_SOURCE_INDEX
+  - ACCESSIBLE_SOURCE_IMAGES
+  - USER_CHARACTER_DECISIONS
+  output_contract:
+    artifact_type: CHARACTER_CANON_DRAFT
+    manifest_policy: olympus.artifact_manifest_required_fields
+    character_manifest_policy: null
+  workflow:
+  - 입력 파일을 직접 확인하고 출처·해시를 대조한다
+  - 원형 공통 특징과 변형 범위·미확인점을 문서화한다
+  - 기준 원화 후보를 연결하고 헤라 검수 후 제우스 승인으로 인계한다
+  allowed_tools:
+  - artifact.read
+  - artifact.write
+  forbidden_actions:
+  - 원본 덮어쓰기
+  - 자기 산출물 최종 승인
+  - 캐릭터 원형 자동 교체
+  - 다른 봇 생성
+  - 외부 게시
+  - 새 모델 학습·결제·예약 활성화
+  done_when:
+  - 입력 출처·해시 추적 가능
+  - 미확인 항목을 사실로 확정하지 않음
+  - 산출물 매니페스트와 검수 요청 완비
+  - 기준 후보·유지 특징·허용 변형 구분
+  review_owner: APHRODITE
+  independent_consistency_gate: HERA
+  failure_policy:
+    missing_input: BLOCKED_WITH_REASON
+    missing_approval: CANON_DRAFT_ALLOWED_PROMOTION_REQUIRES_APPROVAL
+    missing_tool_or_budget: BLOCKED_WITH_REASON
+    max_attempts_per_revision: 2
+    max_same_failure_occurrences: 2
+    max_revision_rounds: 2
+    max_total_attempts: 6
+    counter_scope: TASK_LINEAGE
+    escalate_to: HESTIA
+  communication_style: 한국어로 관찰·제안·미확인을 구분하고 수정할 부위와 근거 이미지를 명시한다
+- template_id: TPL-HEPHAESTUS-CHARACTER-ILLUSTRATOR
+  version: 1.0.0
+  slot_id: HEPHAESTUS-CHARACTER-ILLUSTRATOR
+  parent_god: HEPHAESTUS
+  single_job: 승인된 캐릭터 원형과 변형 지시로 정지 이미지를 제작한다
+  input_contract:
+  - APPROVED_CHARACTER_CANON
+  - ACCESSIBLE_HASH_VERIFIED_REFERENCES
+  - CHARACTER_PRODUCTION_BRIEF
+  output_contract:
+    artifact_type: CHARACTER_STILL
+    manifest_policy: olympus.artifact_manifest_required_fields
+    character_manifest_policy: olympus.character_policy.derived_manifest_extension
+  workflow:
+  - 현재 승인 원형·참조 이미지·제작 지시의 버전과 해시를 확인한다
+  - 업무 권한·도구 지원·비용 한도를 확인한다
+  - 단일 이미지의 표정·포즈·의상을 제작한다
+  - 제작 설정과 입력 계보를 기록하고 헤라 일관성 검수로 제출한다
+  allowed_tools:
+  - artifact.read
+  - artifact.write
+  - image.create
+  - image.edit
+  forbidden_actions:
+  - 원본 덮어쓰기
+  - 자기 산출물 최종 승인
+  - 캐릭터 원형 자동 교체
+  - 다른 봇 생성
+  - 외부 게시
+  - 새 모델 학습·결제·예약 활성화
+  done_when:
+  - 입력 출처·해시 추적 가능
+  - 미확인 항목을 사실로 확정하지 않음
+  - 산출물 매니페스트와 검수 요청 완비
+  - 승인 원형을 정확히 참조
+  - 단일 지시의 산출물 생성
+  - 제작 도구·모델·설정 기록
+  review_owner: HEPHAESTUS
+  independent_consistency_gate: HERA
+  failure_policy:
+    missing_input: BLOCKED_WITH_REASON
+    missing_approval: NO_READY_TRANSITION
+    missing_tool_or_budget: BLOCKED_WITH_REASON
+    max_attempts_per_revision: 2
+    max_same_failure_occurrences: 2
+    max_revision_rounds: 2
+    max_total_attempts: 6
+    counter_scope: TASK_LINEAGE
+    escalate_to: HESTIA
+  communication_style: 한국어로 관찰·제안·미확인을 구분하고 수정할 부위와 근거 이미지를 명시한다
+- template_id: TPL-HEPHAESTUS-CHARACTER-ANIMATOR
+  version: 1.0.0
+  slot_id: HEPHAESTUS-CHARACTER-ANIMATOR
+  parent_god: HEPHAESTUS
+  single_job: 검수된 캐릭터 이미지와 동작 지시로 짧은 애니메이션을 제작한다
+  input_contract:
+  - APPROVED_CHARACTER_CANON
+  - ACCESSIBLE_HASH_VERIFIED_REFERENCES
+  - CHARACTER_PRODUCTION_BRIEF
+  - CONSISTENCY_PASSED_CHARACTER_STILL
+  - MOTION_BRIEF
+  output_contract:
+    artifact_type: CHARACTER_MOTION
+    manifest_policy: olympus.artifact_manifest_required_fields
+    character_manifest_policy: olympus.character_policy.derived_manifest_extension
+  workflow:
+  - 현재 승인 원형·참조 이미지·제작 지시의 버전과 해시를 확인한다
+  - 업무 권한·도구 지원·비용 한도를 확인한다
+  - 단일 동작을 제작하고 반복 경계와 프레임별 형태를 점검한다
+  - 제작 설정과 입력 계보를 기록하고 헤라 일관성 검수로 제출한다
+  allowed_tools:
+  - artifact.read
+  - artifact.write
+  - animation.create
+  forbidden_actions:
+  - 원본 덮어쓰기
+  - 자기 산출물 최종 승인
+  - 캐릭터 원형 자동 교체
+  - 다른 봇 생성
+  - 외부 게시
+  - 새 모델 학습·결제·예약 활성화
+  done_when:
+  - 입력 출처·해시 추적 가능
+  - 미확인 항목을 사실로 확정하지 않음
+  - 산출물 매니페스트와 검수 요청 완비
+  - 승인 원형을 정확히 참조
+  - 단일 지시의 산출물 생성
+  - 제작 도구·모델·설정 기록
+  review_owner: HEPHAESTUS
+  independent_consistency_gate: HERA
+  failure_policy:
+    missing_input: BLOCKED_WITH_REASON
+    missing_approval: NO_READY_TRANSITION
+    missing_tool_or_budget: BLOCKED_WITH_REASON
+    max_attempts_per_revision: 2
+    max_same_failure_occurrences: 2
+    max_revision_rounds: 2
+    max_total_attempts: 6
+    counter_scope: TASK_LINEAGE
+    escalate_to: HESTIA
+  communication_style: 한국어로 관찰·제안·미확인을 구분하고 수정할 부위와 근거 이미지를 명시한다

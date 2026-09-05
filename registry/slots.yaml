@@ -694,3 +694,27 @@ slots:
   status: VACANT
   human_id: null
   hard_delete: false
+- slot_id: APHRODITE-CHARACTER-CANON
+  department: APHRODITE
+  single_job: 사용자 원화에서 매체 공통 캐릭터 원형 명세를 작성한다
+  output_type: CHARACTER_CANON_DRAFT
+  famous_human_name: null
+  status: VACANT
+  human_id: null
+  hard_delete: false
+- slot_id: HEPHAESTUS-CHARACTER-ILLUSTRATOR
+  department: HEPHAESTUS
+  single_job: 승인된 캐릭터 원형과 변형 지시로 정지 이미지를 제작한다
+  output_type: CHARACTER_STILL
+  famous_human_name: null
+  status: VACANT
+  human_id: null
+  hard_delete: false
+- slot_id: HEPHAESTUS-CHARACTER-ANIMATOR
+  department: HEPHAESTUS
+  single_job: 검수된 캐릭터 이미지와 동작 지시로 짧은 애니메이션을 제작한다
+  output_type: CHARACTER_MOTION
+  famous_human_name: null
+  status: VACANT
+  human_id: null
+  hard_delete: false

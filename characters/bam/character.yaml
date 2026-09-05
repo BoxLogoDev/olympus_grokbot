@@ -1,0 +1,550 @@
+# 밤 캐릭터의 초기 등록. 이름 외 외형 명세·원화 선택은 승인 후보다.
+schema_version: '1.2'
+character_id: BAM
+base_variant_id: BAM-BASE
+display_name: 밤
+name_status: USER_CONFIRMED
+name_evidence: 사용자가 캐릭터 이름을 밤이라고 명시함
+record_version: 0.1.0
+record_status: DRAFT
+canon:
+  canon_id: BAM-CANON
+  version: null
+  status: DRAFT
+  sha256: null
+  candidate_reference_source_ids:
+  - BAM-SRC-001
+  - BAM-SRC-002
+  approved_reference_assets: []
+  review_ref: null
+  approval_ref: null
+proposed_identity:
+  status: PENDING_CANON_APPROVAL
+  recognizable_features:
+  - 밤 모양의 머리 윤곽
+  - 머리의 초록 잎
+  - 얼굴 아래 밝은 띠와 점무늬
+  - 둥글고 짧은 팔다리
+  base_details:
+  - 기본 전신의 밝은 배 타원
+  - 몸 뒤쪽의 뾰족한 껍질 형태
+  default_expression: 반쯤 감긴 눈의 느긋한 표정; 감정 표현에 따라 눈을 뜨거나 감을 수 있음
+  palette_observation:
+  - 갈색 몸과 머리
+  - 밝은 베이지 얼굴 아래 부분과 배
+  - 초록 잎
+  measured_palette: null
+  measured_proportions: null
+  allowed_variations:
+  - 직업 의상
+  - 소품
+  - 표정
+  - 포즈
+  - 장면 배경
+  occlusion_rule: 옷이나 소품에 가려진 특징을 외형 삭제로 단정하지 않는다
+  unknowns:
+  - 정확한 색상값과 비율
+  - 측면·후면 원형
+  - 성격·말투·세계관 설정
+  forbidden_automatic_changes:
+  - 이름 변경
+  - 원형 교체
+  - 승인 없이 3D 등 새 스타일을 기본형으로 지정
+sources:
+- source_id: BAM-SRC-001
+  filename: IMG_2892.png
+  role: BASE_FULL_BODY_CANDIDATE
+  sha256: da2265ee47ccb9d5b1d36790279c621f92043280c8f28fc98c41616d2650d372
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-002
+  filename: IMG_2895.jpeg
+  role: FACE_DETAIL_CANDIDATE
+  sha256: 92108c2d05457192242ce39982aa6dcc983b732a90315452100b67e642327cff
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-003
+  filename: IMG_2893.jpeg
+  role: DEVELOPER_VARIANT_REFERENCE
+  sha256: ad87fb34049f7819bee785c732a5b18ef87fca6e2b709bb5067129dd6beb8880
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-004
+  filename: IMG_2894.jpeg
+  role: PROFESSION_STICKER_SHEET
+  sha256: d2cafcb2900c6371bd25c821231499ce9767cac675682892474891b95ca14fc7
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-005
+  filename: IMG_2900.jpeg
+  role: TSHIRT_VARIANT_REFERENCE
+  sha256: 05c3adcb1019ea64361186a91809d522c7b133eef85540709bb4c8b3e1b4018f
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-006
+  filename: IMG_2902.jpeg
+  role: PROFESSION_SHEET_01_09
+  sha256: a2b3db547ac97b77bec44dee01277c2114d6b76400135f7f19164b542384391a
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-007
+  filename: IMG_2903.jpeg
+  role: PROFESSION_SHEET_10_18
+  sha256: ba0aed12c64eac644684a291644b68c70e1703156c41078e3d139f6a9bc97ca7
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-008
+  filename: IMG_2904.jpeg
+  role: PROFESSION_SHEET_19_27
+  sha256: 14ddcbfcb78e6207ca16d23b0193ad0cdda7101f6f801e309e6e03de14b21dac
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-009
+  filename: IMG_2905.jpeg
+  role: PROFESSION_SHEET_28_36
+  sha256: d428b88e1fd1d3e758e055adeee91ec6f093c2f7d07ef2c8c692ed7acafd4965
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 1536
+    height: 1024
+    mode: RGB
+    has_alpha: false
+- source_id: BAM-SRC-010
+  filename: jagerbami.mp4
+  role: MOTION_REFERENCE_ONLY
+  sha256: 932e024bbb7491b6ff2c267bb629cb2f0c585a757f60282b13053d5a2c793274
+  provenance: USER_SUPPLIED_ATTACHMENT
+  storage_ref: null
+  access_status: RESOLVE_BEFORE_EXECUTION
+  approval_status: REFERENCE_ONLY
+  repository_binary_included: false
+  observed_media:
+    width: 512
+    height: 512
+    fps: 30
+    duration_seconds: 3.8
+  note: 기존 병·캐릭터 결합 동작 참고. 제품·상표 요소를 기본 캐릭터 원형이나 새 결과물에 자동 포함하지 않는다.
+variants:
+- variant_id: BAM-JOB-01
+  display_name: 개발자밤
+  profession: 개발자
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 1
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-02
+  display_name: 디자이너밤
+  profession: 디자이너
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 1
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-03
+  display_name: 의사밤
+  profession: 의사
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 1
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-04
+  display_name: 바리스타밤
+  profession: 바리스타
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 2
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-05
+  display_name: 요리사밤
+  profession: 요리사
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 2
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-06
+  display_name: 선생님밤
+  profession: 선생님
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 2
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-07
+  display_name: 트레이너밤
+  profession: 트레이너
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 3
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-08
+  display_name: 배달밤
+  profession: 배달
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 3
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-09
+  display_name: 회계사밤
+  profession: 회계사
+  source_id: BAM-SRC-006
+  sheet_cell:
+    row: 3
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-10
+  display_name: 승무원밤
+  profession: 승무원
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 1
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-11
+  display_name: 유튜버밤
+  profession: 유튜버
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 1
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-12
+  display_name: 작가밤
+  profession: 작가
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 1
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-13
+  display_name: 공무원밤
+  profession: 공무원
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 2
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-14
+  display_name: 카페알바밤
+  profession: 카페알바
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 2
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-15
+  display_name: 경찰밤
+  profession: 경찰
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 2
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-16
+  display_name: 소방밤
+  profession: 소방
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 3
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-17
+  display_name: 간호사밤
+  profession: 간호사
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 3
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-18
+  display_name: 약사밤
+  profession: 약사
+  source_id: BAM-SRC-007
+  sheet_cell:
+    row: 3
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-19
+  display_name: 변호사밤
+  profession: 변호사
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 1
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-20
+  display_name: 기자밤
+  profession: 기자
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 1
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-21
+  display_name: 사진가밤
+  profession: 사진가
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 1
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-22
+  display_name: 미용사밤
+  profession: 미용사
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 2
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-23
+  display_name: 기사밤
+  profession: 기사
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 2
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-24
+  display_name: 농부밤
+  profession: 농부
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 2
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-25
+  display_name: 수의사밤
+  profession: 수의사
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 3
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-26
+  display_name: 건축가밤
+  profession: 건축가
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 3
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-27
+  display_name: 파일럿밤
+  profession: 파일럿
+  source_id: BAM-SRC-008
+  sheet_cell:
+    row: 3
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-28
+  display_name: 군인밤
+  profession: 군인
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 1
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-29
+  display_name: 편의점밤
+  profession: 편의점
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 1
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-30
+  display_name: 은행원밤
+  profession: 은행원
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 1
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-31
+  display_name: 통역사밤
+  profession: 통역사
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 2
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-32
+  display_name: 아나운서밤
+  profession: 아나운서
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 2
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-33
+  display_name: 꽃집밤
+  profession: 꽃집
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 2
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-34
+  display_name: 웹툰밤
+  profession: 웹툰
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 3
+    column: 1
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-35
+  display_name: 타로밤
+  profession: 타로
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 3
+    column: 2
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+- variant_id: BAM-JOB-36
+  display_name: 백수밤
+  profession: 백수
+  source_id: BAM-SRC-009
+  sheet_cell:
+    row: 3
+    column: 3
+  status: REFERENCE_ONLY
+  approved_asset_refs: []
+asset_preparation:
+  source_files_have_no_alpha: true
+  individual_export_required_for_sheets: true
+  preserve_original_bytes: true
+  processed_assets_are_new_versions: true
+  background_removal: 원본을 보존한 파생 파일에서 수행하고 흰 배·눈·외곽선 손상을 검수한다
+pilot:
+  status: DRAFT
+  runtime_enabled: false
+  canon_approval_required: true
+  expressions:
+  - 기본
+  - 기쁨
+  - 당황
+  - 분노
+  - 슬픔
+  - 피곤
+  expression_count: 6
+  motion:
+    variant_id: BAM-JOB-01
+    action: 타이핑
+    duration_seconds_min: 3
+    duration_seconds_max: 4
+    loop_requested: true
+  outputs_status: NOT_PRODUCED
+  tool_binding: null
+  cost_budget: null
+  assigned_human_ids: []
+release:
+  publication_approval_ref: null
+  original_binary_upload_approval_ref: null

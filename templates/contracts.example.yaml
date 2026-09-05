@@ -1,10 +1,10 @@
-# OLYMPUS v1.1 계약 예시
+# OLYMPUS v1.2 계약 예시
 # 각 문서는 독립된 저장 레코드로 사용할 수 있다.
 # 플레이스홀더를 포함한 문서 예시이며 유효한 승인 토큰이나 실행 설정이 아니다.
 
 ---
 kind: "PROJECT_REQUEST"
-schema_version: "1.1"
+schema_version: "1.2"
 request:
   request_id: "REQ-20260903-0001"
   requested_by: "ZEUS"
@@ -21,7 +21,7 @@ request:
 
 ---
 kind: "PROJECT_PLAN"
-schema_version: "1.1"
+schema_version: "1.2"
 project:
   project_id: "PRJ-20260903-0001"
   trace_id: "TRC-20260903-0001"
@@ -47,7 +47,7 @@ project:
 
 ---
 kind: "HUMAN_CREATION_PROPOSAL"
-schema_version: "1.1"
+schema_version: "1.2"
 proposal:
   proposal_id: "HCP-20260903-0001"
   requested_by_god: "APOLLO"
@@ -69,7 +69,7 @@ proposal:
 
 ---
 kind: "HUMAN"
-schema_version: "1.1"
+schema_version: "1.2"
 human:
   human_id: "AP-H001"
   display_name: "상징 이름"
@@ -92,7 +92,7 @@ human:
 
 ---
 kind: "ATOMIC_TASK"
-schema_version: "1.1"
+schema_version: "1.2"
 task:
   task_id: "PRJ-20260903-0001-AP-T001"
   project_id: "PRJ-20260903-0001"
@@ -136,7 +136,7 @@ task:
 
 ---
 kind: "ARTIFACT"
-schema_version: "1.1"
+schema_version: "1.2"
 artifact:
   artifact_id: "ART-SCRIPT-0001"
   project_id: "PRJ-20260903-0001"
@@ -146,7 +146,7 @@ artifact:
   parent_god: "APOLLO"
   model_profile: "WRITER"
   prompt_version: "1.1.0"
-  policy_version: "1.1"
+  policy_version: "1.2"
   policy_commit: "<loaded-policy-commit>"
   input_artifacts:
     - "ART-BEATS-0001@v2"
@@ -162,7 +162,7 @@ artifact:
 
 ---
 kind: "APPROVAL_REQUEST"
-schema_version: "1.1"
+schema_version: "1.2"
 approval_request:
   request_id: "APRQ-0001"
   project_id: "PRJ-20260903-0001"
@@ -179,7 +179,7 @@ approval_request:
 
 ---
 kind: "APPROVAL_TOKEN"
-schema_version: "1.1"
+schema_version: "1.2"
 approval_token:
   token_id: "APR-0001"
   approved_by: "ZEUS"
@@ -197,7 +197,7 @@ approval_token:
 
 ---
 kind: "ACTION_MANIFEST"
-schema_version: "1.1"
+schema_version: "1.2"
 action_manifest:
   action_manifest_id: "ACT-YOUTUBE-0001"
   action: "YOUTUBE_PUBLISH"
@@ -224,7 +224,7 @@ action_manifest:
 
 ---
 kind: "EXECUTION_TEMPLATE"
-schema_version: "1.1"
+schema_version: "1.2"
 execution_template:
   template_id: "TPL-APOLLO-SHORTS-SCRIPT"
   version: "1.1.0"
@@ -247,7 +247,7 @@ execution_template:
 
 ---
 kind: "ROUTINE_PROPOSAL"
-schema_version: "1.1"
+schema_version: "1.2"
 routine:
   routine_id: "RTN-EXAMPLE-0001"
   workflow_version: "1.1.0"

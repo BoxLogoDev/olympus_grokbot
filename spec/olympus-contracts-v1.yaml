@@ -1,6 +1,6 @@
 olympus:
-  schema_version: '1.1'
-  architecture_version: '1.1'
+  schema_version: '1.2'
+  architecture_version: '1.2'
   language: ko-KR
   runtime: platform-neutral
   invariants:
@@ -26,6 +26,7 @@ olympus:
     evidence_validation_before_promotion: true
     routine_validation_before_schedule: true
     execution_template_contract_required: true
+    character_canon_approval_and_lineage_required: true
   roles:
     ZEUS:
       kind: USER
@@ -464,6 +465,7 @@ olympus:
       - DIONYSUS
       - POSEIDON
       - ARES
+      optional_asset_dependency: CHARACTER
     EMOTICON:
       default_gods:
       - ATHENA
@@ -477,6 +479,7 @@ olympus:
       optional_gods:
       - DIONYSUS
       - ARES
+      optional_asset_dependency: CHARACTER
     WEB_APP:
       default_gods:
       - ATHENA
@@ -490,6 +493,7 @@ olympus:
       optional_gods:
       - DIONYSUS
       - ARES
+      optional_asset_dependency: CHARACTER
     BLOG:
       default_gods:
       - ATHENA
@@ -503,6 +507,27 @@ olympus:
       - DIONYSUS
       - HEPHAESTUS
       - ARES
+      optional_asset_dependency: CHARACTER
+    CHARACTER:
+      default_gods:
+      - APHRODITE
+      - HEPHAESTUS
+      - HERA
+      - DEMETER
+      optional_gods:
+      - ATHENA
+      - APOLLO
+      - ARTEMIS
+      - DIONYSUS
+      - POSEIDON
+      - HERMES
+      - ARES
+      playbook: playbooks/character-production.md
+      shared_asset_provider_for:
+      - YOUTUBE
+      - EMOTICON
+      - WEB_APP
+      - BLOG
   id_formats:
     project: PRJ-{YYYYMMDD}-{SEQ4}
     trace: TRC-{YYYYMMDD}-{SEQ4}
@@ -530,7 +555,9 @@ olympus:
     - 막힌 지점
     - 다음 수확
   human_state_policy:
-    required_template_reference: [template_id, template_version]
+    required_template_reference:
+    - template_id
+    - template_version
     registration_defaults:
       status: DORMANT
       probation_status: PROVISIONAL
@@ -730,9 +757,12 @@ olympus:
       - ABOLISH_PUBLICATION_SLOTS
       - MECHANICAL_SENSITIVE_WORD_EVASION
   rule_bindings:
-    OLY-INV-019: [evidence_governance]
-    OLY-INV-020: [routine_policy]
-    OLY-INV-021: [execution_template_policy]
+    OLY-INV-019:
+    - evidence_governance
+    OLY-INV-020:
+    - routine_policy
+    OLY-INV-021:
+    - execution_template_policy
     OLY-GOV-001:
     - amendment_policy
     OLY-EVD-001:
@@ -758,3 +788,95 @@ olympus:
     - youtube_playbook.scoped_channels
     OLY-YT-004:
     - youtube_playbook.scoped_channels
+    OLY-INV-022:
+    - character_policy
+    OLY-CHR-001:
+    - character_policy
+    - project_lines.CHARACTER
+  character_policy:
+    rule_id: OLY-CHR-001
+    playbook: playbooks/character-production.md
+    registry_paths:
+    - characters/bam/character.yaml
+    execution_templates: templates/character-production.yaml
+    character_is_human: false
+    variants_create_humans: false
+    preserve_originals: true
+    generated_output_auto_promotes_to_canon: false
+    canon_states:
+    - DRAFT
+    - IN_REVIEW
+    - WAITING_APPROVAL
+    - APPROVED
+    - SUPERSEDED
+    canon_approval:
+      approver: ZEUS
+      review_owner: HERA
+      action: CHARACTER_CANON_APPROVE
+      authenticated_event_required: true
+      scope:
+      - character_id
+      - canon_id
+      - version
+      - sha256
+      - reference_assets
+      reference_asset_fields:
+      - asset_id
+      - version
+      - sha256
+      any_change_invalidates: true
+      grants_external_publication: false
+      verification_policy: approval_execution_policy
+    production_ready_requires:
+    - REGISTERED_SINGLE_OWNER
+    - COMPLETE_EXECUTION_TEMPLATE
+    - TASK_TOOL_CAPABILITY_AND_BUDGET
+    - APPROVED_CURRENT_CANON
+    - MATCHING_CANON_APPROVAL_EVENT
+    - ACCESSIBLE_HASH_VERIFIED_REFERENCES
+    - VERSIONED_PRODUCTION_BRIEF
+    motion_additional_requires:
+    - CONSISTENCY_PASSED_INPUT_STILL
+    - MATCHING_INPUT_CANON
+    - MOTION_BRIEF
+    missing_precondition:
+      ready_allowed: false
+      reason_field: block_reason
+      task_states_policy: states.task
+    derived_manifest_extension:
+    - character_id
+    - variant_id
+    - canon_ref
+    - reference_assets
+    - production_brief_ref
+    - generation_record
+    - consistency_review_ref
+    canon_ref_fields:
+    - canon_id
+    - version
+    - sha256
+    reference_asset_fields:
+    - asset_id
+    - version
+    - sha256
+    - storage_ref
+    generation_record_fields:
+    - method
+    - tool
+    - tool_version
+    - model
+    - model_version
+    - settings
+    - seed
+    unavailable_generation_field: NULL_WITH_REASON
+    review_pending_before_review_allowed: true
+    consuming_lines_require:
+    - APPROVED_CANON
+    - CONSISTENCY_REVIEW_PASS
+    - PINNED_ASSET_VERSION_AND_HASH
+    - TARGET_FORMAT_REVIEW
+    superseded_canon_reuse: IMPACT_REVIEW_AND_EXPLICIT_ZEUS_EXCEPTION
+    public_release_policy: approval_execution_policy
+    source_storage_default: CONTROLLED_EXTERNAL_ASSET_STORE
+    new_training_or_paid_tool_activation_included: false
+    retry_policy: retry_policy
