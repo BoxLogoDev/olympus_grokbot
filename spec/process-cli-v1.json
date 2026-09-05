@@ -1,0 +1,314 @@
+{
+  "schema_version": "1.0",
+  "transport": "python -m runtime.ops COMMAND --db PRIVATE_DB --artifact-root PRIVATE_ROOT --request JSON_FILE",
+  "status_export_project_flag": true,
+  "request_encoding": "utf-8",
+  "identity_authenticated": false,
+  "external_dispatch": false,
+  "commands": {
+    "block": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "reason": {
+          "required": true
+        }
+      }
+    },
+    "change-input": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "inputs": {
+          "required": true
+        },
+        "reason": {
+          "required": true
+        },
+        "context": {
+          "required": false
+        },
+        "retry_card_id": {
+          "required": false
+        },
+        "memory_refs": {
+          "required": false
+        }
+      }
+    },
+    "change-reference": {
+      "parameters": {
+        "old_ref": {
+          "required": true
+        },
+        "new_ref": {
+          "required": true
+        },
+        "reason": {
+          "required": true
+        },
+        "impact_review_ref": {
+          "required": true
+        },
+        "canon_approval_evidence": {
+          "required": false
+        }
+      }
+    },
+    "claim": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "actor_id": {
+          "required": true
+        },
+        "max_cost_units": {
+          "required": true
+        },
+        "phase": {
+          "required": false
+        }
+      }
+    },
+    "create": {
+      "parameters": {
+        "data": {
+          "required": true
+        }
+      }
+    },
+    "deployment": {
+      "parameters": {
+        "action": {
+          "required": true
+        },
+        "record": {
+          "required": true
+        }
+      }
+    },
+    "export": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        }
+      }
+    },
+    "handoff": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        }
+      }
+    },
+    "memory": {
+      "parameters": {
+        "action": {
+          "required": true
+        },
+        "record": {
+          "required": true
+        }
+      }
+    },
+    "observe": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "record": {
+          "required": true
+        }
+      }
+    },
+    "reconcile": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "attempt_id": {
+          "required": true
+        },
+        "actor_id": {
+          "required": true
+        },
+        "outcome": {
+          "required": true
+        },
+        "evidence_ref": {
+          "required": true
+        },
+        "cost": {
+          "required": false
+        },
+        "result": {
+          "required": false
+        },
+        "failure_key": {
+          "required": false
+        },
+        "failure_class": {
+          "required": false
+        }
+      }
+    },
+    "register": {
+      "parameters": {
+        "data": {
+          "required": true
+        }
+      }
+    },
+    "report": {
+      "parameters": {}
+    },
+    "retry": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "inputs": {
+          "required": true
+        },
+        "reason": {
+          "required": true
+        },
+        "context": {
+          "required": false
+        },
+        "retry_card_id": {
+          "required": false
+        },
+        "memory_refs": {
+          "required": false
+        }
+      }
+    },
+    "reuse": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        }
+      }
+    },
+    "review": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "attempt_id": {
+          "required": true
+        },
+        "actor_id": {
+          "required": true
+        },
+        "result_digest": {
+          "required": true
+        },
+        "accepted": {
+          "required": true
+        },
+        "evidence_ref": {
+          "required": true
+        },
+        "cost": {
+          "required": true
+        },
+        "failed_checks": {
+          "required": false
+        },
+        "repair_tasks": {
+          "required": false
+        },
+        "reusable_tasks": {
+          "required": false
+        },
+        "failure_class": {
+          "required": false
+        },
+        "failure_key": {
+          "required": false
+        }
+      }
+    },
+    "status": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        }
+      }
+    },
+    "submit": {
+      "parameters": {
+        "project_id": {
+          "required": true
+        },
+        "task_id": {
+          "required": true
+        },
+        "attempt_id": {
+          "required": true
+        },
+        "actor_id": {
+          "required": true
+        },
+        "result": {
+          "required": true
+        },
+        "cost": {
+          "required": true
+        }
+      }
+    },
+    "update-binding": {
+      "parameters": {
+        "human_id": {
+          "required": true
+        },
+        "skill_ref": {
+          "required": true
+        },
+        "tools": {
+          "required": true
+        },
+        "evidence_ref": {
+          "required": true
+        }
+      }
+    },
+    "validation": {
+      "parameters": {
+        "record": {
+          "required": true
+        }
+      }
+    }
+  }
+}

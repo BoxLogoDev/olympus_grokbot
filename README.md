@@ -21,6 +21,8 @@
 [**이슈 채택 기록**](./docs/decisions/2026-09-05-issues-1-2.md) ·
 [**봇 운영 플레이북**](./playbooks/agent-operations.md) ·
 [**로컬 실행 안내**](./runtime/README.md) ·
+[**Process 운영 적용표**](./docs/operations/implementation-status.md) ·
+[**Grokbot 설치·운영**](./playbooks/grokbot-process-install.md) ·
 [**밤 캐릭터 파이프라인**](./playbooks/character-production.md) ·
 [**유튜브 운영 기준**](./playbooks/youtube-shorts.md) ·
 [**v1.0 기록**](./OLYMPUS_Agent_Architecture_v1.0.md) ·
@@ -79,6 +81,12 @@ flowchart TB
 ```
 
 ---
+
+## Process 운영 패키지 0.1.0
+
+실제 파일·검수 증거를 기록하는 별도 원장과 공통 인계 CLI, 다섯 라인의 Skill 초안, Notion/Craft export 검사기를 추가했다.
+로컬 기능 시험 통과와 실제 Grokbot 적용을 구분한다. 현재 실제 수동 검증은 0/10이며 성과 지표는 UNMEASURED다.
+[적용표와 전환 조건](./docs/operations/implementation-status.md), [변경 근거](./docs/decisions/2026-09-05-process-implementation.md)를 확인한다.
 
 ## ✨ v1.3에서 추가된 것
 
@@ -420,3 +428,5 @@ Designed by **[BoxLogoDev](https://github.com/BoxLogoDev)**
 [YAML 계약](./spec/olympus-contracts-v1.yaml)
 
 </div>
+
+GitHub·Notion·Craft의 정보 원본·검색·기록·인계·갱신 기준은 [도구 사용 Process](./playbooks/tool-coordination.md)를 따른다.
