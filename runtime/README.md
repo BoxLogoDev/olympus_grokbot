@@ -1,6 +1,6 @@
-# 로컬 운영 시제품
+# 운영 증거 원장과 로컬 시제품
 
-이 디렉터리는 **로컬 SQLite 업무 원장과 오프라인 평가 도구**다. 가상 업무로 중단 복구·의존성·부분 재실행·검수·비용 예약을 시험한다. 실제 봇, 모델, 이미지·영상 생성 도구, 인증 승인 큐, 게시·배포에는 연결되지 않는다.
+기존 `runtime.ledger`와 `runtime.demo`는 **로컬 시뮬레이션**이다. 가상 업무로 중단 복구·의존성·부분 재실행·검수·비용 예약을 시험한다. 실제 봇, 모델, 이미지·영상 생성 도구, 인증 승인 큐, 게시·배포에는 연결되지 않는다.
 
 Python 3.11 이상과 표준 라이브러리를 사용한다. 저장소 루트에서 실행한다.
 
@@ -16,6 +16,24 @@ python -m runtime.evaluations examples/evaluation-sample.json
 python -m pip install -r requirements-dev.txt
 python scripts/validate_contracts.py
 ```
+
+## 운영 증거 원장 0.1.0
+
+새 `runtime.operations`/`runtime.ops`는 버전·SHA-256을 가진 실제 파일을 확인하고 별도 운영 DB에 기록한다.
+시뮬레이션 DB를 운영 DB로 여는 것은 거부한다. 원장 자체는 제작 도구·인증·게시·배포에 연결되지 않는다.
+
+```bash
+python -m runtime.ops --help
+python scripts/validate_operations.py
+python scripts/operations_smoke.py --output /tmp/olympus-file-smoke
+```
+
+스모크 출력 디렉터리는 새 경로여야 한다. 모든 예제 업무는 TEST이며 실제 지표에서 제외된다.
+[설치·운영 안내](../playbooks/grokbot-process-install.md),
+[CLI 입력 계약](../spec/process-cli-v1.json), [운영 적용표](../docs/operations/implementation-status.md)를 따른다.
+
+아래 설명은 기존 시뮬레이션과 오프라인 비교 도구의 범위다. 새 운영 원장은 상위 예산·검수 비용·초과액 정산을
+별도로 구현했다. 실측 비교에는 `--require-joint-improvement`를 지정하면 비용과 시간 모두의 개선을 요구한다.
 
 ## 1. 밤 업무 원장 데모
 
