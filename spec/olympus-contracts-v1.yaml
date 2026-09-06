@@ -709,6 +709,24 @@ olympus:
     - policy_commit
   youtube_playbook:
     path: playbooks/youtube-shorts.md
+    production_stops:
+    - content_id: fatal-giggle
+      display_name: Fatal Giggle
+      status: PRODUCTION_STOPPED
+      decision_date: '2026-09-06'
+      authority: ZEUS_DIRECT_DECISION
+      decision_ref: docs/decisions/2026-09-06-fatal-giggle-production-stop.md
+      new_production_assignments_allowed: false
+      continue_unfinished_production_allowed: false
+      production_retries_allowed: false
+      routine_generated_production_allowed: false
+      preserve_existing_assets_history_and_humans: true
+      settle_inflight_results_costs_and_leases: true
+      existing_scheduled_publications: SEPARATE_ZEUS_DECISION
+      existing_publication_removal: SEPARATE_ZEUS_DECISION
+      restart_requires_new_zeus_decision: true
+      application_status: DOCUMENTED
+      runtime_verified: false
     quality_rule_id: OLY-YT-001
     priority_diagnostics:
     - HOOK_AND_EARLY_EXIT
@@ -728,7 +746,6 @@ olympus:
     scoped_channels:
       scope:
       - 민음사 월드문학전집 숏츠
-      - Fatal Giggle
       rule_ids:
       - OLY-YT-002
       - OLY-YT-003

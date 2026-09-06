@@ -32,6 +32,8 @@
 
 ## 🏛️ OLYMPUS란?
 
+**현재 콘텐츠 결정 (2026-09-06): Fatal Giggle 제작 중단.** 신규 제작·후속 제작·재시도 대상에서 제외하며 기존 콘텐츠와 이력을 보존한다. [제작 중단 결정과 운영 반영 범위](./docs/decisions/2026-09-06-fatal-giggle-production-stop.md)를 확인한다.
+
 OLYMPUS는 여러 AI가 자유롭게 떠드는 스웜이 아니라 **명확한 지휘 계통, 권한, 업무 계약, 품질 게이트**를 가진 AI 조직이다.
 
 > **One Project, Many Gods, Many Hands, One Owner per Task.**
