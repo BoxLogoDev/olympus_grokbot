@@ -82,7 +82,7 @@ flowchart TB
 
 ---
 
-## Process 운영 패키지 0.1.0
+## Process 운영 패키지 0.1.1
 
 실제 파일·검수 증거를 기록하는 별도 원장과 공통 인계 CLI, 다섯 라인의 Skill 초안, Notion/Craft export 검사기를 추가했다.
 로컬 기능 시험 통과와 실제 Grokbot 적용을 구분한다. 현재 실제 수동 검증은 0/10이며 성과 지표는 UNMEASURED다.

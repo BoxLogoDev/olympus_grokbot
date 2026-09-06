@@ -13,7 +13,7 @@ import re
 import sqlite3
 import uuid
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 POLICY_COMMIT = "30363791228181b986cc94491ab938ee544699f4"
 LINES = {"YOUTUBE", "EMOTICON", "WEB_APP", "BLOG", "CHARACTER"}
 FAILURES = {"INPUT", "PRODUCTION", "QUALITY", "TOOL", "PERMISSION"}
@@ -311,7 +311,7 @@ class Operations:
         return self.status(data["project_id"])
 
     def workflow_definition(self, project):
-        fields = ("slot_id", "effect", "required_checks", "depends_on")
+        fields = ("slot_id", "effect", "required_checks", "depends_on", "done_when")
         return digest({tid: {**{k: t.get(k, []) for k in fields},
                               "skill_ref": t["runtime_binding"]["skill_ref"],
                               "tools": t["runtime_binding"]["tools"],
@@ -342,6 +342,8 @@ class Operations:
         for run in matched:
             self.artifact(run["evidence_ref"]); self.artifact(run["hestia_review_ref"])
             project = self.project(run["project_id"])
+            require(project["workflow_definition_hash"] == self.workflow_definition(project),
+                    "workflow definition requires revalidation with a new workflow version")
             require(run["snapshot_hash"] == self.validation_snapshot(project), "validation run changed")
             for task in project["tasks"].values(): self.verify_completed(project, task)
         return matched
@@ -354,6 +356,15 @@ class Operations:
     def task(self, project, task_id):
         require(task_id in project["tasks"], "unknown task")
         return project["tasks"][task_id]
+
+    def affected_tasks(self, project, roots):
+        affected = set(roots)
+        while True:
+            updated = affected | {k for k, t in project["tasks"].items()
+                                  if set(t.get("depends_on", [])) & affected}
+            if updated == affected:
+                return affected
+            affected = updated
 
     def limits(self, task):
         return (len(task["attempts"]) < 6 and task["revision"] <= 2
@@ -398,7 +409,10 @@ class Operations:
                     require(selected["workflow_ref"] == p["workflow_ref"] or p.get("comparison_plan_ref"),
                             "new assignments stopped for replaced workflow")
                 require(t["effect"] == "INTERNAL", "EXTERNAL_ACTION_REQUIRES_AUTHENTICATED_GATEWAY; no dispatch implemented")
-                require(self.actor(actor_id)["skill_ref"] == t["runtime_binding"]["skill_ref"], "binding skill changed")
+                owner = self.actor(actor_id)
+                require(owner["skill_ref"] == t["runtime_binding"]["skill_ref"], "binding skill changed")
+                require({k: owner[k] for k in ("bot_id", "skill_ref", "tools")} == t["runtime_binding"],
+                        "runtime binding changed; review the pinned assignment")
                 self.check_inputs(p, t)
             else:
                 require(t["state"] == "REVIEW" and t["reviewer_human_id"] == actor_id, "review not ready or wrong reviewer")
@@ -502,25 +516,47 @@ class Operations:
             p = self.project(project_id); t, a = self.current(p, task_id, attempt_id)
             require(t["state"] == "REVIEWING" and actor_id == t["reviewer_human_id"], "review must be claimed by designated reviewer")
             require(result_digest == a["result_digest"], "review targets a different result")
-            self.artifact(evidence_ref); self.verify_result(a["result"], t)
-            if accepted: self.check_inputs(p, t)
+            self.artifact(evidence_ref)
+            # Missing/corrupt output is a reason to reject, not to strand its review.
+            # The immutable submitted digest, reviewer and fresh evidence still bind the decision.
+            if accepted:
+                self.verify_result(a["result"], t); self.check_inputs(p, t)
             amount = self.cost(cost)
+            affected = set()
             decision = dict(accepted=accepted, actor=actor_id, result_digest=result_digest, evidence_ref=evidence_ref,
                             failed_checks=failed_checks, repair_tasks=repair_tasks, reusable_tasks=reusable_tasks,
                             failure_class=failure_class, failure_key=failure_key, cost=cost, at=now())
             if not accepted:
                 require(failure_class in FAILURES and isinstance(failed_checks, list) and bool(failed_checks), "rejection needs failure class and failed checks")
-                require(isinstance(repair_tasks, list) and task_id in repair_tasks and set(repair_tasks) <= p["tasks"].keys(), "repair tasks must include rejected task")
-                require(isinstance(reusable_tasks, list) and set(reusable_tasks) <= p["tasks"].keys()
-                        and not set(reusable_tasks) & set(repair_tasks), "invalid reusable tasks")
+                require(isinstance(repair_tasks, list) and all(isinstance(x, str) for x in repair_tasks)
+                        and task_id in repair_tasks and len(repair_tasks) == len(set(repair_tasks))
+                        and set(repair_tasks) <= p["tasks"].keys(), "unique repair tasks must include rejected task")
+                affected = self.affected_tasks(p, repair_tasks)
+                require(isinstance(reusable_tasks, list) and all(isinstance(x, str) for x in reusable_tasks)
+                        and len(reusable_tasks) == len(set(reusable_tasks)) and set(reusable_tasks) <= p["tasks"].keys()
+                        and not set(reusable_tasks) & affected, "invalid reusable tasks or affected descendant")
+                others = affected - {task_id}
+                require(not any(r["task"] in others for r in self.db.execute(
+                    "SELECT task FROM leases WHERE project=?", (project_id,))), "affected outcome unresolved")
+                require(all(p["tasks"][k]["state"] not in {"REVIEW", "REVIEWING"} for k in others),
+                        "finish affected review first")
+                require(all(p["tasks"][k]["revision"] < 2 for k in others), "revision limit reached")
+                for k in reusable_tasks: self.verify_completed(p, p["tasks"][k])
+                for k in others:
+                    item = p["tasks"][k]
+                    item.update(generation=item["generation"] + 1, revision=item["revision"] + 1,
+                                current_attempt=None)
+                    item["state"] = "DRAFT" if self.limits(item) else "BLOCKED"
+                    item["block_reason"] = None if self.limits(item) else "RETRY_LIMIT"
                 self.record_failure(t, failure_key); t["revision"] += 1
+                decision["affected_tasks"] = sorted(affected)
             self.settle(p, a["review_claim"]["reserved"], amount)
             a["review"] = decision; a["status"] = "ACCEPTED" if accepted else "REJECTED"
-            t["state"] = "DONE" if accepted else ("READY" if self.limits(t) else "BLOCKED")
+            t["state"] = "DONE" if accepted else ("DRAFT" if self.limits(t) else "BLOCKED")
             t["block_reason"] = None if accepted or self.limits(t) else "RETRY_LIMIT"
             self.db.execute("DELETE FROM leases WHERE actor=? AND attempt=? AND phase='REVIEW'", (actor_id, attempt_id))
             self.refresh(p); self.save(p); self.event(project_id, "REVIEW_RECORDED", {"task_id": task_id, "attempt_id": attempt_id, **decision})
-        return {"state": t["state"], "external_execution": "NOT_PERFORMED"}
+        return {"state": t["state"], "affected_tasks": sorted(affected), "external_execution": "NOT_PERFORMED"}
 
     def block(self, project_id, task_id, reason):
         text(reason, "reason")
@@ -542,10 +578,18 @@ class Operations:
             self.actor(actor_id); self.artifact(evidence_ref)
             require(not self.db.execute("SELECT 1 FROM leases WHERE actor=? AND NOT(project=? AND task=? AND phase='REVIEW')", (actor_id, project_id, task_id)).fetchone(), "reviewer busy")
             if outcome == "RESUME":
+                require(attempt_id == t["current_attempt"], "stale or unknown attempt")
                 require(not self.db.execute("SELECT 1 FROM leases WHERE project=? AND task=?", (project_id, task_id)).fetchone(), "unknown active attempt must be settled first")
-                require(self.limits(t) and t["effect"] == "INTERNAL", "cannot bypass retry/approval gate")
-                self.check_inputs(p, t)
-                t["state"] = "DRAFT"; self.refresh(p)
+                previous = t.get("blocked_from")
+                require(previous in {"DRAFT", "READY", "REVIEW"}, "no resumable paused phase")
+                require(t["effect"] == "INTERNAL", "cannot bypass approval gate")
+                if previous == "REVIEW":
+                    self.current(p, task_id, attempt_id)
+                    t["state"] = "REVIEW"
+                else:
+                    require(self.limits(t), "cannot bypass retry gate")
+                    t["state"] = "DRAFT"; self.refresh(p)
+                    if t["state"] == "READY": self.check_inputs(p, t)
             else:
                 t, a = self.current(p, task_id, attempt_id)
                 lease = self.db.execute("SELECT * FROM leases WHERE project=? AND task=? AND attempt=?", (project_id, task_id, attempt_id)).fetchone()
@@ -570,6 +614,7 @@ class Operations:
                 self.settle(p, reservation, self.cost(cost))
                 self.db.execute("DELETE FROM leases WHERE project=? AND task=? AND attempt=?", (project_id, task_id, attempt_id))
             t["block_reason"] = "RETRY_LIMIT" if t["state"] == "BLOCKED" else None
+            t.pop("blocked_from", None)
             self.save(p); self.event(project_id, "RECONCILED", {"task_id": task_id, "attempt_id": attempt_id, "outcome": outcome, "evidence_ref": evidence_ref, "cost": cost, "failure_key": failure_key, "failure_class": failure_class})
         return {"state": t["state"]}
 
@@ -579,11 +624,7 @@ class Operations:
         for ref in inputs: self.artifact(ref)
         with self.transaction():
             p = self.project(project_id); t = self.task(p, task_id)
-            affected = {task_id}
-            while True:
-                updated = affected | {k for k, x in p["tasks"].items() if set(x.get("depends_on", [])) & affected}
-                if updated == affected: break
-                affected = updated
+            affected = self.affected_tasks(p, {task_id})
             require(not any(r["task"] in affected for r in self.db.execute("SELECT task FROM leases WHERE project=?", (project_id,))), "affected worker/reviewer outcome unresolved")
             require(all(p["tasks"][k]["state"] not in {"REVIEW", "REVIEWING"} for k in affected), "finish or reconcile affected review first")
             require(all(p["tasks"][k]["revision"] < 2 for k in affected), "revision limit reached")
@@ -682,6 +723,8 @@ class Operations:
         with self.transaction():
             p = self.project(record.get("project_id"))
             require(p["data_origin"] == "REAL", "TEST cannot count as manual validation")
+            require(p["workflow_definition_hash"] == self.workflow_definition(p),
+                    "workflow definition requires revalidation with a new workflow version")
             require(all(t["state"] == "DONE" for t in p["tasks"].values()), "run incomplete")
             for t in p["tasks"].values():
                 self.verify_completed(p, t)
@@ -833,11 +876,7 @@ class Operations:
                     if any(matches(ref) for ref in task["inputs"]) or matches(task.get("context", {}).get("canon_ref", {})):
                         direct.add(tid)
                 if not direct: continue
-                affected = set(direct)
-                while True:
-                    updated = affected | {k for k, t in project["tasks"].items() if set(t.get("depends_on", [])) & affected}
-                    if updated == affected: break
-                    affected = updated
+                affected = self.affected_tasks(project, direct)
                 require(not any(r["task"] in affected for r in self.db.execute(
                     "SELECT task FROM leases WHERE project=?", (project["project_id"],))), "affected outcome unresolved")
                 require(all(project["tasks"][k]["state"] not in {"REVIEW", "REVIEWING"} for k in affected), "finish affected review first")
@@ -893,10 +932,16 @@ class Operations:
     def handoff(self, project_id, task_id):
         with self.transaction(readonly=True):
             project = self.project(project_id); task = self.task(project, task_id)
-            phase = "REVIEW" if task["state"] in {"REVIEW", "REVIEWING"} else "PRODUCTION"
+            state = task["state"]
+            phase = "REVIEW" if state in {"REVIEW", "REVIEWING", "BLOCKED"} else "PRODUCTION"
+            attempt = task["attempts"][-1] if task["current_attempt"] else {}
+            next_action = {"DRAFT": "wait_dependencies", "READY": "claim_production", "RUNNING": "submit",
+                           "REVIEW": "claim_review", "REVIEWING": "review", "BLOCKED": "reconcile",
+                           "DONE": "none"}[state]
             return {"project_id": project_id, "task_id": task_id, "attempt_id": task["current_attempt"], "state": task["state"],
                     "owner_human_id": task["reviewer_human_id"] if phase == "REVIEW" else task["owner_human_id"],
-                    "next_action": "reconcile" if task["state"] == "BLOCKED" else phase.lower(),
+                    "next_action": next_action, "result_digest": attempt.get("result_digest"),
+                    "result": attempt.get("result"),
                     "inputs": task["inputs"], "context": task.get("context", {}),
                     "dependencies": {d: {"state": project["tasks"][d]["state"],
                         "artifacts": project["tasks"][d]["attempts"][-1].get("result", {}).get("artifacts", [])

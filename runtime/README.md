@@ -17,7 +17,7 @@ python -m pip install -r requirements-dev.txt
 python scripts/validate_contracts.py
 ```
 
-## 운영 증거 원장 0.1.0
+## 운영 증거 원장 0.1.1
 
 새 `runtime.operations`/`runtime.ops`는 버전·SHA-256을 가진 실제 파일을 확인하고 별도 운영 DB에 기록한다.
 시뮬레이션 DB를 운영 DB로 여는 것은 거부한다. 원장 자체는 제작 도구·인증·게시·배포에 연결되지 않는다.
@@ -31,6 +31,11 @@ python scripts/operations_smoke.py --output /tmp/olympus-file-smoke
 스모크 출력 디렉터리는 새 경로여야 한다. 모든 예제 업무는 TEST이며 실제 지표에서 제외된다.
 [설치·운영 안내](../playbooks/grokbot-process-install.md),
 [CLI 입력 계약](../spec/process-cli-v1.json), [운영 적용표](../docs/operations/implementation-status.md)를 따른다.
+
+0.1.1은 중단 전 검수 단계 복원, 손상 파일 반려·정산, 수정 대상과 후속 단계의 원자적 무효화,
+제작 담당자의 전체 바인딩 대조를 보강했다. 인계에는 상태별 다음 행동과 현재 결과·해시를 포함한다.
+완료 조건 `done_when`도 절차 정의 해시에 포함하므로 0.1.0의 검증 기록을 새 정의의 수동 통과로
+그대로 승계하지 않는다. [PR 검토 및 전환 절차](../docs/decisions/2026-09-06-pr8-process-review.md)를 확인한다.
 
 아래 설명은 기존 시뮬레이션과 오프라인 비교 도구의 범위다. 새 운영 원장은 상위 예산·검수 비용·초과액 정산을
 별도로 구현했다. 실측 비교에는 `--require-joint-improvement`를 지정하면 비용과 시간 모두의 개선을 요구한다.

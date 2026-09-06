@@ -230,6 +230,7 @@ class OperationsTests(unittest.TestCase):
             Operations(path, self.root)
 
     def test_failure_review_requires_repair_scope_and_counter(self):
+        self.finish("c", owner="other")
         aid, rd = self.submit()
         self.ops.claim("p", "a", "reviewer", 3, phase="REVIEW")
         with self.assertRaises(OperationError):
@@ -392,3 +393,117 @@ class OperationsTests(unittest.TestCase):
                               memory_refs=[{"id": "m", "version": "1", "sha256": memory["content_hash"]}])
         with self.assertRaisesRegex(OperationError, "outside validity"):
             self.claim()
+
+    def test_tool_only_binding_change_stops_old_assignment(self):
+        self.ops.update_binding("worker", self.skill, ["different-tool"], self.evidence)
+        before = self.ops.export("p")
+        with self.assertRaisesRegex(OperationError, "binding"):
+            self.claim()
+        self.assertEqual(self.ops.export("p"), before)
+        self.assertEqual(self.ops.status("p")["leases"], [])
+
+    def test_blocked_review_resumes_review_without_new_production(self):
+        aid, rd = self.submit()
+        self.ops.block("p", "a", "operator pause before review")
+        self.ops.reconcile("p", "a", aid, "reviewer", "RESUME", self.evidence)
+        self.assertEqual(self.state()["state"], "REVIEW")
+        self.assertEqual(len(self.state()["attempts"]), 1)
+        with self.assertRaises(OperationError): self.claim()
+        self.ops.claim("p", "a", "reviewer", 3, phase="REVIEW")
+        self.ops.review("p", "a", aid, "reviewer", rd, True, self.evidence, self.cost(1))
+        self.assertEqual(self.ops.status("p")["project"]["spent"], 3)
+
+    def test_stale_resume_is_rejected_without_changing_state(self):
+        self.submit()
+        self.ops.block("p", "a", "pause")
+        before = self.ops.export("p")
+        with self.assertRaisesRegex(OperationError, "stale"):
+            self.ops.reconcile("p", "a", "older-attempt", "reviewer", "RESUME", self.evidence)
+        self.assertEqual(self.ops.export("p"), before)
+
+    def test_ready_and_dependency_wait_resume_preserve_readiness(self):
+        for tid, state in (("a", "READY"), ("b", "DRAFT")):
+            self.ops.block("p", tid, "operator pause")
+            self.ops.reconcile("p", tid, None, "reviewer", "RESUME", self.evidence)
+            self.assertEqual(self.state(tid)["state"], state)
+
+    def reject(self, task, aid, rd, repairs, reusable=None):
+        return self.ops.review("p", task, aid, "reviewer", rd, False, self.evidence, self.cost(1),
+                               failed_checks=["quality"], repair_tasks=repairs,
+                               reusable_tasks=reusable or [], failure_class="QUALITY", failure_key="quality.source")
+
+    def test_damaged_output_can_be_rejected_and_repaired(self):
+        aid, rd = self.submit()
+        self.ops.claim("p", "a", "reviewer", 3, phase="REVIEW")
+        (self.root / "output.txt").unlink()
+        self.reject("a", aid, rd, ["a"])
+        self.assertEqual(self.state()["state"], "READY")
+        self.assertEqual(self.ops.status("p")["project"]["spent"], 3)
+        self.assertEqual(self.ops.status("p")["leases"], [])
+        self.output = self.file("repaired.txt", "new accepted output")
+        self.finish()
+        self.assertEqual(self.state()["state"], "DONE")
+        self.assertEqual(len(self.state()["attempts"]), 2)
+
+    def test_repair_plan_invalidates_upstream_and_all_dependents(self):
+        self.finish(); self.finish("c", owner="other")
+        aid, rd = self.submit("b")
+        self.ops.claim("p", "b", "reviewer", 3, phase="REVIEW")
+        untouched = self.state("c")
+        result = self.reject("b", aid, rd, ["a", "b"], ["c"])
+        self.assertEqual(result["affected_tasks"], ["a", "b"])
+        self.assertEqual(self.state("a")["state"], "READY")
+        self.assertEqual(self.state("b")["state"], "DRAFT")
+        self.assertEqual(self.state("c"), untouched)
+        self.assertEqual(self.state("a")["attempts"][0]["status"], "ACCEPTED")
+        self.assertEqual(self.ops.status("p")["project"]["spent"], 9)
+        self.finish("a"); self.finish("b")
+        self.assertEqual(self.ops.status("p")["production_status"], "COMPLETED")
+
+    def test_repair_plan_cannot_invalidate_a_running_consumer(self):
+        with self.ops.transaction():
+            p = self.ops.project("p")
+            p["tasks"]["c"]["depends_on"] = ["a"]
+            self.ops.save(p)
+        self.finish()
+        self.claim("c", owner="other")
+        aid, rd = self.submit("b")
+        self.ops.claim("p", "b", "reviewer", 3, phase="REVIEW")
+        before = self.ops.export("p")
+        with self.assertRaisesRegex(OperationError, "unresolved"):
+            self.reject("b", aid, rd, ["a", "b"])
+        self.assertEqual(self.ops.export("p"), before)
+
+    def test_reusable_scope_must_be_completed_and_outside_affected_tasks(self):
+        aid, rd = self.submit()
+        self.ops.claim("p", "a", "reviewer", 3, phase="REVIEW")
+        before = self.ops.export("p")
+        for reusable in (["c"], ["b"]):
+            with self.assertRaises(OperationError): self.reject("a", aid, rd, ["a"], reusable)
+            self.assertEqual(self.ops.export("p"), before)
+
+    def test_done_when_is_part_of_real_workflow_version(self):
+        first = self.spec("real-original", [self.task("a")]); first["data_origin"] = "REAL"
+        self.ops.create(first)
+        changed = self.spec("real-changed", [self.task("a")]); changed["data_origin"] = "REAL"
+        changed["tasks"][0]["done_when"] = "A different acceptance criterion"
+        with self.assertRaisesRegex(OperationError, "behavior changed"):
+            self.ops.create(changed)
+
+    def test_handoff_follows_phase_and_supplies_review_target(self):
+        self.assertEqual(self.ops.handoff("p", "b")["next_action"], "wait_dependencies")
+        self.assertEqual(self.ops.handoff("p", "a")["next_action"], "claim_production")
+        aid = self.claim()
+        self.assertEqual(self.ops.handoff("p", "a")["next_action"], "submit")
+        rd = self.ops.submit("p", "a", aid, "worker", self.result(), self.cost())["result_digest"]
+        handoff = self.ops.handoff("p", "a")
+        self.assertEqual(handoff["next_action"], "claim_review")
+        self.assertEqual(handoff["result_digest"], rd)
+        self.assertEqual(handoff["result"], self.result())
+        self.ops.block("p", "a", "pause")
+        self.assertEqual(self.ops.handoff("p", "a")["owner_human_id"], "reviewer")
+        self.ops.reconcile("p", "a", aid, "reviewer", "RESUME", self.evidence)
+        self.ops.claim("p", "a", "reviewer", 3, phase="REVIEW")
+        self.assertEqual(self.ops.handoff("p", "a")["next_action"], "review")
+        self.ops.review("p", "a", aid, "reviewer", rd, True, self.evidence, self.cost(1))
+        self.assertEqual(self.ops.handoff("p", "a")["next_action"], "none")
