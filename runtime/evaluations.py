@@ -61,7 +61,7 @@ def load(path: Path) -> dict:
                       parse_constant=reject_constant)
 
 
-def compare(bundle: dict, minimum_pairs: int = 20) -> dict:
+def compare(bundle: dict, minimum_pairs: int = 20, require_joint_improvement: bool = False) -> dict:
     """Compare identical case/trial pairs; 20 is a configurable triage floor, not confidence.
 
     Input evidence references are descriptive records, not authenticated approvals.
@@ -71,6 +71,10 @@ def compare(bundle: dict, minimum_pairs: int = 20) -> dict:
     require(isinstance(bundle, dict), "Evaluation bundle must be an object")
     require(bundle.get("schema_version") == "1.0", "Unsupported evaluation schema")
     synthetic = _boolean(bundle, "synthetic")
+    if require_joint_improvement and not synthetic:
+        require(bundle.get("product_line") in {"YOUTUBE", "EMOTICON", "WEB_APP", "BLOG", "CHARACTER"},
+                "Real joint comparison requires product_line")
+        _text(bundle, "comparison_plan_ref")
     dataset = bundle.get("dataset")
     require(isinstance(dataset, dict), "Missing dataset")
     for key in ("id", "version", "sha256"):
@@ -88,6 +92,9 @@ def compare(bundle: dict, minimum_pairs: int = 20) -> dict:
     configurations: dict[str, set] = defaultdict(set)
     for record in runs:
         require(isinstance(record, dict), "Invalid run record")
+        if require_joint_improvement and not synthetic:
+            require(record.get("product_line", bundle["product_line"]) == bundle["product_line"],
+                    "Mixed product lines require separate comparisons")
         run_id = _text(record, "run_id")
         require(run_id not in run_ids, "Duplicate run_id")
         run_ids.add(run_id)
@@ -176,6 +183,13 @@ def compare(bundle: dict, minimum_pairs: int = 20) -> dict:
         elif regressions or candidate["user_revisions"] > baseline["user_revisions"] or candidate["unexpected_interventions"] > baseline["unexpected_interventions"]:
             comparison = "KEEP_BASELINE"
             reasons.append("Case regressions or increased user correction/intervention require review.")
+        elif require_joint_improvement and not (
+            candidate["total_cost_usd"] < baseline["total_cost_usd"]
+            and candidate["mean_elapsed_seconds"] < baseline["mean_elapsed_seconds"]
+            and candidate["first_attempt_pass_rate"] >= baseline["first_attempt_pass_rate"]
+            and candidate["grader_false_passes"] <= baseline["grader_false_passes"]):
+            comparison = "INCONCLUSIVE"
+            reasons.append("Joint policy requires lower cost AND latency with no first-pass or false-pass regression.")
         elif candidate["accepted"] > baseline["accepted"] or candidate["total_cost_usd"] < baseline["total_cost_usd"] or candidate["mean_elapsed_seconds"] < baseline["mean_elapsed_seconds"]:
             comparison = "CANDIDATE_FOR_REVIEW"
             reasons.append("Observed improvement without a case-level acceptance regression; independent review remains required.")
@@ -185,6 +199,7 @@ def compare(bundle: dict, minimum_pairs: int = 20) -> dict:
     return {
         "schema_version": "1.0", "report_kind": "OFFLINE_EVALUATION",
         "dataset_ref": {key: dataset[key] for key in ("id", "version", "sha256")},
+        "product_line": bundle.get("product_line"), "comparison_plan_ref": bundle.get("comparison_plan_ref"),
         "synthetic": synthetic, "recommendation": "DEMO_ONLY" if synthetic else comparison,
         "comparison_result": comparison, "minimum_pairs": minimum_pairs,
         "paired_runs": len(keys), "distinct_cases": len({key[0] for key in keys}),
@@ -193,7 +208,7 @@ def compare(bundle: dict, minimum_pairs: int = 20) -> dict:
         "limitations": ["A sample-size floor is not a statistical confidence guarantee.",
                         "Evidence references and human labels are supplied records, not authenticated approval events.",
                         "Cost, quality and latency tradeoffs require review before any rollout."],
-        "version_promoted": False,
+        "version_promoted": False, "require_joint_improvement": require_joint_improvement,
     }
 
 
@@ -201,9 +216,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path)
     parser.add_argument("--minimum-pairs", type=int, default=20)
+    parser.add_argument("--require-joint-improvement", action="store_true")
     args = parser.parse_args()
     try:
-        report = compare(load(args.input), args.minimum_pairs)
+        report = compare(load(args.input), args.minimum_pairs, args.require_joint_improvement)
     except (ValueError, TypeError, KeyError, OSError) as exc:
         parser.exit(2, f"Evaluation input rejected: {exc}\n")
     print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))

@@ -98,3 +98,9 @@ python -m runtime.evaluations examples/evaluation-sample.json
 가장 작은 실제 파일럿은 기본 원형 확정, 표정 6종, 개발자밤 동작 한 개다. 실제 시작에는 밤 설정의 원형 후보를 검수·승인하고, 참조 파일 접근·해시 확인, 직무별 인간 등록·완전한 템플릿·모델과 도구 권한·예산, 검수자를 준비해야 한다. 현재 저장소의 후보 원형과 빈 인간 레지스트리를 승인·등록 완료로 간주하지 않는다.
 
 순서는 로컬 메타데이터 예시 → 생산 연결·실제 파일럿 → 실측 평가 자료 → 제한 적용이다. 수동 성공 사례가 쌓이기 전 자동 예약하지 않는다. 첫 회고에서는 지표의 관측값·표본 수, 병목과 다음 한 가지 수정만 정리한다. 실제 성과가 없으면 미측정으로 남긴다.
+
+## Process 운영 패키지 연결
+
+현행 규칙의 도구 구현은 [운영 적용표](../docs/operations/implementation-status.md), 실제 설치는
+[Grokbot 설치·운영](grokbot-process-install.md), 자료 수집은 [export 지시문](grokbot-export-request.md)을 따른다.
+공통·라인 Skill은 DRAFT이며 실제 수용 전 운영 검증 완료로 승격하지 않는다.

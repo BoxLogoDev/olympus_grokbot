@@ -1,0 +1,502 @@
+{
+  "schema_version": "1.0",
+  "policy_version": "1.3",
+  "policy_commit": "30363791228181b986cc94491ab938ee544699f4",
+  "lines": {
+    "YOUTUBE": {
+      "workflow_id": "OLY-YOUTUBE-PROCESS",
+      "version": "0.1.0",
+      "status": "DRAFT",
+      "validation_runs": [],
+      "skill_path": "skills/olympus-youtube/SKILL.md",
+      "scope": "현재 채널의 기존 3권 배정·원본 문학 방향·07·12·18·19 슬롯·편집 도구를 보존한다. 기존 클립 제작 담당의 슬롯·도구 연결이 확인되지 않으면 해당 인계는 BLOCKED다.",
+      "stages": [
+        {
+          "stage_id": "research",
+          "slot_id": "ARTEMIS-SOURCE-HUNTER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [],
+          "output_contract": "권별 근거와 출처",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "SOURCE_ACCESS",
+            "FACT_SCOPE"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "script",
+          "slot_id": "APOLLO-SHORTS-SCRIPT",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "research"
+          ],
+          "output_contract": "권별 숏츠 대본",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "SCRIPT_SOURCE",
+            "READING_TIME"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "hook",
+          "slot_id": "APHRODITE-HOOK-WRITER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "script"
+          ],
+          "output_contract": "대본 의미와 맞는 훅",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "HOOK_PROMISE",
+            "MEANING"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "assembly",
+          "slot_id": "HEPHAESTUS-VIDEO-ASSEMBLER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "script",
+            "hook"
+          ],
+          "output_contract": "기존 클립·음성·자막을 조립한 영상",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "VIDEO_PLAYBACK",
+            "AUDIO_SUBTITLE_SYNC",
+            "CLIP_INPUT_HASH"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "metadata",
+          "slot_id": "HERMES-METADATA-PACKAGER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "assembly"
+          ],
+          "output_contract": "영상·제목·설명·썸네일의 게시 준비 매니페스트",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "MANIFEST_MATCH",
+            "CHANNEL_SETTINGS"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        }
+      ]
+    },
+    "EMOTICON": {
+      "workflow_id": "OLY-EMOTICON-PROCESS",
+      "version": "0.1.0",
+      "status": "DRAFT",
+      "validation_runs": [],
+      "skill_path": "skills/olympus-emoticon/SKILL.md",
+      "scope": "승인 원형의 표정 6종과 문구·규격 패키지를 검증한다. 목표 플랫폼이 없거나 최신 규격이 없으면 제출 규격 단계는 준비되지 않은 상태로 둔다.",
+      "stages": [
+        {
+          "stage_id": "rules",
+          "slot_id": "ARTEMIS-PLATFORM-RULE-SCOUT",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [],
+          "output_contract": "목표 플랫폼의 확인일 있는 규격",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "OFFICIAL_SOURCE",
+            "FORMAT_RULES"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "copy",
+          "slot_id": "APOLLO-EMOTICON-COPY",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "rules"
+          ],
+          "output_contract": "표정별 문구",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "COPY_READABILITY",
+            "MEANING"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "expression",
+          "slot_id": "APHRODITE-EXPRESSION-DESIGNER",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "copy"
+          ],
+          "output_contract": "표정·포즈 제작 지시",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "APPROVED_CANON",
+            "EXPRESSION_DIFFERENCE"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "illustration",
+          "slot_id": "HEPHAESTUS-CHARACTER-ILLUSTRATOR",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "expression"
+          ],
+          "output_contract": "개별 표정 이미지",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "CANON_CONSISTENCY",
+            "ACTUAL_ALPHA"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "package",
+          "slot_id": "HEPHAESTUS-IMAGE-PROCESSOR",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "illustration",
+            "rules"
+          ],
+          "output_contract": "크기·용량·이름을 맞춘 표정 패키지",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "DIMENSIONS",
+            "FILE_SIZE",
+            "SET_COMPLETENESS"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        }
+      ]
+    },
+    "WEB_APP": {
+      "workflow_id": "OLY-WEB_APP-PROCESS",
+      "version": "0.1.0",
+      "status": "DRAFT",
+      "validation_runs": [],
+      "skill_path": "skills/olympus-web-app/SKILL.md",
+      "scope": "기존 프로젝트의 작은 기능 한 개를 격리된 작업공간에서 구현한다. 프론트엔드·백엔드가 모두 필요하면 별도 인간과 별도 원자 업무로 나눈다.",
+      "stages": [
+        {
+          "stage_id": "requirements",
+          "slot_id": "ATHENA-REQUIREMENTS-ANALYST",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [],
+          "output_contract": "요구사항과 완료 조건",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "ACCEPTANCE_CRITERIA"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "flow",
+          "slot_id": "ATHENA-USER-FLOW",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "requirements"
+          ],
+          "output_contract": "사용자 흐름",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "USER_FLOW",
+            "ERROR_STATES"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "frontend",
+          "slot_id": "HEPHAESTUS-WEB-FRONTEND",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "flow"
+          ],
+          "output_contract": "프론트엔드 변경",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "TYPECHECK",
+            "FRONTEND_TESTS"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "backend",
+          "slot_id": "HEPHAESTUS-BACKEND",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "requirements"
+          ],
+          "output_contract": "백엔드 변경",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "API_TESTS",
+            "AUTH_BOUNDARY"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "integration-tests",
+          "slot_id": "HEPHAESTUS-TEST-ENGINEER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "frontend",
+            "backend"
+          ],
+          "output_contract": "통합 테스트 증거",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "INTEGRATION_TESTS",
+            "REGRESSION_TESTS"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "release-notes",
+          "slot_id": "HERMES-RELEASE-NOTES",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "integration-tests"
+          ],
+          "output_contract": "미리보기·변경점·롤백 준비",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "PREVIEW",
+            "RELEASE_EVIDENCE"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        }
+      ]
+    },
+    "BLOG": {
+      "workflow_id": "OLY-BLOG-PROCESS",
+      "version": "0.1.0",
+      "status": "DRAFT",
+      "validation_runs": [],
+      "skill_path": "skills/olympus-blog/SKILL.md",
+      "scope": "원고 한 편과 대표 이미지·출처·게시 준비 묶음을 만든다. 기존 블로그 담당이 Notion 초안 전용이라면 그 경계를 유지한다.",
+      "stages": [
+        {
+          "stage_id": "sources",
+          "slot_id": "ARTEMIS-SOURCE-HUNTER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [],
+          "output_contract": "자료·출처 묶음",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "SOURCE_ACCESS",
+            "FACT_SCOPE"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "draft",
+          "slot_id": "APOLLO-BLOG-WRITER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "sources"
+          ],
+          "output_contract": "원고",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "CLAIM_CITATIONS",
+            "READER_PURPOSE"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "edit",
+          "slot_id": "APOLLO-COPY-EDITOR",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "draft"
+          ],
+          "output_contract": "교정된 원고",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "CLARITY",
+            "FACT_PRESERVATION"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "cover",
+          "slot_id": "APHRODITE-COVER-ART-DIRECTOR",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "edit"
+          ],
+          "output_contract": "대표 이미지 제작 지시·대체 텍스트",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "ARTICLE_RELEVANCE",
+            "ALT_TEXT"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "image",
+          "slot_id": "HEPHAESTUS-IMAGE-PROCESSOR",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "cover"
+          ],
+          "output_contract": "허용된 원본을 가공한 대표 이미지",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "LICENSE",
+            "IMAGE_FORMAT"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "metadata",
+          "slot_id": "HERMES-METADATA-PACKAGER",
+          "review_slot_id": "HERA-ACCEPTANCE-GATE",
+          "depends_on": [
+            "edit",
+            "image"
+          ],
+          "output_contract": "게시 준비 파일·메타데이터",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "MANIFEST_MATCH",
+            "DRAFT_ONLY"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        }
+      ]
+    },
+    "CHARACTER": {
+      "workflow_id": "OLY-CHARACTER-PROCESS",
+      "version": "0.1.0",
+      "status": "DRAFT",
+      "validation_runs": [],
+      "skill_path": "skills/olympus-character/SKILL.md",
+      "scope": "원형 초안·제우스 승인 확보를 선행 조건으로 한다. 승인 후 기본·기쁨·당황·분노·슬픔·피곤 표정 6종과 개발자밤 3~4초 타이핑 동작을 만든다. 표정별 업무 카드를 각각 생성한다.",
+      "stages": [
+        {
+          "stage_id": "expression-brief",
+          "slot_id": "APHRODITE-EXPRESSION-DESIGNER",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [],
+          "output_contract": "표정별 제작 지시",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "APPROVED_CANON",
+            "REFERENCE_HASH"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "stills",
+          "slot_id": "HEPHAESTUS-CHARACTER-ILLUSTRATOR",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "expression-brief"
+          ],
+          "output_contract": "개별 표정·타이핑 준비 이미지",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "CANON_CONSISTENCY",
+            "ALPHA"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_EXPRESSION_OR_POSE"
+        },
+        {
+          "stage_id": "motion-brief",
+          "slot_id": "APOLLO-SCENE-DIRECTOR",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "stills"
+          ],
+          "output_contract": "개발자밤 동작 지시",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "APPROVED_STILL",
+            "DURATION"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "motion",
+          "slot_id": "HEPHAESTUS-CHARACTER-ANIMATOR",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "motion-brief"
+          ],
+          "output_contract": "3~4초 타이핑 반복 동작",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "FULL_PLAYBACK",
+            "LOOP_BOUNDARY",
+            "CANON_CONSISTENCY"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "package",
+          "slot_id": "HEPHAESTUS-IMAGE-PROCESSOR",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "stills",
+            "motion"
+          ],
+          "output_contract": "재사용 패키지",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "FORMAT",
+            "LINEAGE"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        },
+        {
+          "stage_id": "catalog",
+          "slot_id": "DEMETER-ASSET-LIBRARIAN",
+          "review_slot_id": "HERA-CONSISTENCY-AUDIT",
+          "depends_on": [
+            "package"
+          ],
+          "output_contract": "자산 카탈로그",
+          "required_checks": [
+            "PARENT_GOD_REVIEW",
+            "ACCESSIBLE_ASSETS",
+            "VERSIONED_REFERENCES"
+          ],
+          "effect": "INTERNAL",
+          "expansion": "ONE_CARD_PER_OUTPUT"
+        }
+      ]
+    }
+  }
+}

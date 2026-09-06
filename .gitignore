@@ -8,3 +8,8 @@ __pycache__/
 *.db-wal
 *.db-shm
 .pytest_cache/
+# Operational exports and installation archives stay outside policy source.
+operations-private/
+private-operations/
+.operations/
+*.ops.zip

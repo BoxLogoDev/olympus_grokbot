@@ -1,0 +1,52 @@
+# 기록 양식 예시. null은 실제 실행 전 미기입이며 완료 증거가 아니다.
+schema_version: '1.0'
+example_only: true
+status: DRAFT
+rule_refs: [OLY-OPS-001, OLY-OPS-002, OLY-OPS-003, OLY-OPS-005, OLY-OPS-006]
+task_link:
+  project_id: null
+  task_id: null
+  attempt_id: null
+  source_system: null
+  source_object_id: null
+  target_system: null
+  target_object_id: null
+operation:
+  purpose: null
+  method: null
+  connection_scope: null
+  unique_operation_key: null
+  fields_to_change: []
+  observed_source_revision: null
+  expected_target_revision: null
+  started_at: null
+  ended_at: null
+verification:
+  state: NOT_ATTEMPTED
+  returned_object_id: null
+  readback_at: null
+  checked_fields: []
+  evidence_ref: null
+  error_class: null
+  next_action: null
+transfer:
+  export_id: null
+  source_artifact_ref: null
+  payload_scope: null
+  part_count: null
+  source_file_sha256: null
+  reconstructed_file_sha256: null
+  canonical_json_sha256: null
+  expected_counts: {bots: null, routines: null, runs: null}
+  received_counts: {bots: null, routines: null, runs: null}
+  receiver_ack: NOT_RECEIVED
+  receiver_ack_evidence_ref: null
+metrics:
+  search_seconds: null
+  read_calls: null
+  write_calls: null
+  retry_calls: null
+  duplicate_objects: null
+  stale_seconds: null
+  manual_copy_count: null
+  measurement_status: UNMEASURED
