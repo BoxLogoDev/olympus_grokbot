@@ -774,6 +774,8 @@ olympus:
       - ABOLISH_PUBLICATION_SLOTS
       - MECHANICAL_SENSITIVE_WORD_EVASION
   rule_bindings:
+    OLY-EMO-001:
+    - emoticon_reference_policy
     OLY-INV-019:
     - evidence_governance
     OLY-INV-020:
@@ -974,3 +976,32 @@ olympus:
       authenticated_approval_queue: NOT_IMPLEMENTED
       external_publication: NOT_IMPLEMENTED
       routine_scheduler: NOT_IMPLEMENTED
+
+  emoticon_reference_policy:
+    rule_id: OLY-EMO-001
+    decision_date: '2026-09-06'
+    decision_ref: docs/decisions/2026-09-06-kakao-official-guides.md
+    playbook: playbooks/kakao-emoticon-guides.md
+    platform: KAKAO_EMOTICON
+    generative_output_blanket_ban: false
+    source_provenance_required: true
+    quality_review_required: true
+    external_submission_approval_required: true
+    platform_claim_requires_source: true
+    official_ai_acceptance_inferred: false
+    reference_checked_at: '2026-09-06'
+    implementation_stage: DOCUMENTED
+    runtime_verified: false
+    official_references:
+    - id: KAKAO-CREATOR-GUIDE
+      url: https://kakaoemoticonstudio.notion.site/
+      inspection_scope: PAGE_BODY
+    - id: KAKAO-CREATOR-SERIES
+      url: https://kakaoemoticonstudio.notion.site/creator-series
+      inspection_scope: PAGE_BODY
+    - id: KAKAO-IMAGE-GUIDE
+      url: https://kakaoemoticonstudio.notion.site/image-guide
+      inspection_scope: DATABASE_INDEX_ONLY
+    - id: KAKAO-WEBP-ANIMATOR
+      url: https://kakaoemoticonstudio.notion.site/webpanimator-guide
+      inspection_scope: PAGE_BODY

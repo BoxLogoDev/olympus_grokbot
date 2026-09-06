@@ -21,6 +21,7 @@
 [**이슈 채택 기록**](./docs/decisions/2026-09-05-issues-1-2.md) ·
 [**봇 운영 플레이북**](./playbooks/agent-operations.md) ·
 [**로컬 실행 안내**](./runtime/README.md) ·
+[**카카오 공식 가이드 적용**](./playbooks/kakao-emoticon-guides.md) ·
 [**밤 캐릭터 파이프라인**](./playbooks/character-production.md) ·
 [**유튜브 운영 기준**](./playbooks/youtube-shorts.md) ·
 [**v1.0 기록**](./OLYMPUS_Agent_Architecture_v1.0.md) ·
