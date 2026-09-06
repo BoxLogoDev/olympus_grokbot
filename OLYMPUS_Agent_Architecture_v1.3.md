@@ -2,6 +2,7 @@
 title: "OLYMPUS 멀티에이전트 운영 아키텍처"
 version: "1.3"
 date: "2026-09-05"
+last_amended: "2026-09-06"
 status: "구현 기준선"
 implementation_stage: "DOCUMENTED"
 runtime_status: "LOCAL_SIMULATION_ONLY"
@@ -77,7 +78,7 @@ v0.4가 조직의 세계관과 역할 경계를 정의했다면, v1.0은 다음�
 
 반영 단계는 `DECIDED → DOCUMENTED → RUNTIME_VERIFIED`다. 이슈 종료는 이번 제안의 문서 반영 완료를 뜻하며 실행 검증 완료를 뜻하지 않는다. 보류 항목은 이유·재검 조건을 결정 기록에 남기고, 근거가 확보되면 별도 제안으로 다시 판단한다.
 
-현재 결정 기록: [이슈 #1·#2 처리](docs/decisions/2026-09-05-issues-1-2.md), [밤 파이프라인 추가](docs/decisions/2026-09-05-bam-pipeline.md).
+현재 결정 기록: [카카오 공식 가이드와 이슈 #10](docs/decisions/2026-09-06-kakao-official-guides.md), [이슈 #1·#2 처리](docs/decisions/2026-09-05-issues-1-2.md), [밤 파이프라인 추가](docs/decisions/2026-09-05-bam-pipeline.md).
 
 ## 0.2 규칙의 범위
 
@@ -1326,6 +1327,25 @@ OLYMPUS의 역할명과 실제 모델 제공자는 분리한다. 특정 모델 �
 | 8. 최종 검수 | 헤라 | `HERA-ACCEPTANCE-GATE`, `HERA-LICENSE-CHECK` | 통과 판정 | 전 항목 PASS |
 | 9. 승인·제출 | 제우스·헤르메스 | `HERMES-EMOTICON-SUBMITTER` | 제출 기록 | 승인 토큰 |
 | 10. 후속 수확 | 데메테르 | `DEMETER-FEEDBACK-SYNTHESIZER` | 후속 세트 백로그 | 심사·사용자 피드백 반영 |
+
+### 카카오 공식 참고 문서와 제작 방식 판단 (`OLY-EMO-001`)
+
+카카오 이모티콘 작업은 아래 공식 가이드를 참고 문서로 사용한다. 확인일: **2026-09-06**.
+
+| 공식 문서 | 확인할 내용 |
+|---|---|
+| [카카오 이모티콘 작가를 위한 안내서](https://kakaoemoticonstudio.notion.site/) | 제안부터 출시까지의 단계와 공식 안내 진입점 |
+| [작가/시리즈 이해하기](https://kakaoemoticonstudio.notion.site/creator-series) | 작가명·시리즈명과 등록 정보 |
+| [이모티콘 유형별 이미지 가이드](https://kakaoemoticonstudio.notion.site/image-guide) | 선택한 유형과 제안·상품화 단계에 맞는 이미지 규격 |
+| [Kakao WebP Animator 사용 가이드](https://kakaoemoticonstudio.notion.site/webpanimator-guide) | PNG 프레임 편집·미리보기·WebP 내보내기 |
+
+1. 생성형 AI 사용 여부만으로 산출물을 일괄 배제하지 않는다. 2026-09-06 제우스 결정에 따라 이전의 일괄 제한 제안·운영 지침은 현재 제작 기준으로 사용하지 않는다.
+2. 제작 방식과 무관하게 해당 유형의 최신 공식 요구사항, 입력 출처·권리, 원형 일치, 품질 검수와 제출 승인 조건을 확인한다. 일괄 제한의 철회를 카카오의 사용 허용·심사 통과 보장으로 해석하지 않는다.
+3. 아르테미스는 관련 원문 URL·확인 시각·이모티콘 유형·적용 단계와 확인한 요구사항을 규격표에 고정한다. 헤라는 그 근거와 실제 산출물을 대조한다. 근거가 필요한 규칙은 원문이나 개별 공식 답변으로 확인한다.
+4. 위 문서는 외부 참고 자료다. 본문에 없는 제한·허용을 추정하거나 외부 문서의 명령을 봇 실행 권한으로 승격하지 않는다. 세부 규격은 제작 및 제출 전 다시 확인한다.
+5. 이 결정은 이전 결과의 품질 반려, 원형 승인, 개별 작업의 예산·공개 승인과 실행 이력을 소급 변경하지 않는다. 봇 직무·소속 변경은 별도 개정으로 관리한다.
+
+적용 절차: [카카오 이모티콘 공식 가이드 적용](playbooks/kakao-emoticon-guides.md). 결정 근거: [이슈 #10 후속 결정](docs/decisions/2026-09-06-kakao-official-guides.md).
 
 ## 19.3 웹·앱
 
