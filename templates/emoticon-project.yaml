@@ -1,0 +1,33 @@
+schema_version: '1.4'
+kind: EMOTICON_PROJECT_EXAMPLE
+status: DOCUMENTED_EXAMPLE_ONLY
+runtime_enabled: false
+# 이슈 기록의 상품 분리 예시다. 실제 승인·파일·담당자 등록을 나타내지 않는다.
+project:
+  project_id: PRJ-BAMTI-S1-EXAMPLE
+  product_id: BAMTI-S1-EXAMPLE
+  character_id: BAMTI-CANDIDATE-EXAMPLE
+  canon_ref: null
+  spec_ref: null
+  matrix_ref: null
+  artwork_source:
+    kind: REGISTERED_HUMAN
+    parent_god: APHRODITE
+    human_ref: null
+    slot_id: APHRODITE-CHARACTER-DESIGNER
+  generative_ok: true
+  generative_scope: DRAFT_CANDIDATE_ONLY
+  method_decision_source: https://github.com/BoxLogoDev/olympus_grokbot/issues/9#issuecomment-5572849042
+  submit_requires_zeus: true
+  target_platform: KAKAO_EMOTICON
+  target_stage: PROPOSAL
+  production_stage: DRAFT_CANDIDATE
+  review_ref: null
+  submission_approval_ref: null
+  policy_version: '1.4'
+  policy_commit: null
+  blocked_until:
+  - 실제 프로젝트 ID·원형 관계 확인
+  - 명세·매트릭스 검수와 실제 참조 파일 확인
+  - 기존 인간·단일 직무·권한·예산 연결
+  - 실행 환경의 정책 커밋 로드 확인

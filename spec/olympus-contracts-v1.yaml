@@ -1,10 +1,11 @@
 olympus:
-  schema_version: '1.3'
-  architecture_version: '1.3'
+  schema_version: '1.4'
+  architecture_version: '1.4'
   language: ko-KR
   runtime: platform-neutral
   invariants:
     zeus_gateway: HESTIA
+    product_required_user_trigger_policy: execution_handoff_policy
     hestia_can_create_human: false
     god_can_create_human_in_own_department: true
     cross_department_human_creation: false
@@ -36,6 +37,7 @@ olympus:
       - 고위험 승인
       direct_recipients:
       - HESTIA
+      conditional_execution_trigger_policy: execution_handoff_policy
     HESTIA:
       kind: GOD
       department: ORCHESTRATION
@@ -578,6 +580,7 @@ olympus:
     issuer: AUTHENTICATED_APPROVAL_QUEUE
     approval_event_required: true
     agent_claimed_approval_is_authority: false
+    bounded_batch_approval_policy: batch_approval_policy
     hash_scope: COMPLETE_ACTION_MANIFEST
     hash_algorithm: SHA-256
     serialization: UTF8_JSON_SORTED_KEYS_COMPACT_NO_DUPLICATE_KEYS_NO_NONFINITE_NUMBERS
@@ -740,6 +743,7 @@ olympus:
     - scene_continuity
     - voice_and_captions
     - editing
+    - tempo_and_breathing_room
     - metadata_matches_content
     - original_contribution
     content_interest_world_is_optional_strategy: true
@@ -773,7 +777,22 @@ olympus:
       - DISCARD_CHANNEL_BY_COUNTRY_EXPOSURE
       - ABOLISH_PUBLICATION_SLOTS
       - MECHANICAL_SENSITIVE_WORD_EVASION
+      - COMMUNITY_CARD_ADS_PIVOT
+      - MASS_HUMOR_POSTING
   rule_bindings:
+    OLY-GOV-002:
+    - decision_precedence_policy
+    OLY-ROLE-001:
+    - role_boundary_policy
+    OLY-HND-001:
+    - execution_handoff_policy
+    OLY-EMO-002:
+    - emoticon_project_policy
+    OLY-YT-005:
+    - youtube_production_policy
+    OLY-YT-006:
+    - youtube_queue_policy
+    - batch_approval_policy
     OLY-EMO-001:
     - emoticon_reference_policy
     OLY-INV-019:
@@ -920,7 +939,7 @@ olympus:
     implementation_stage: DOCUMENTED
     runtime_status: LOCAL_SIMULATION_ONLY
     preserves_existing_invariants: true
-    adds_gods_or_human_slots: false
+    adds_gods_or_human_slots: false  # OLY-OPS-001..006 자체의 범위; v1.4 역할 개정은 role_boundary_policy
     workflow_reuse:
       rule_id: OLY-OPS-001
       contract_ref: operations.workflow_reuse
@@ -1005,3 +1024,219 @@ olympus:
     - id: KAKAO-WEBP-ANIMATOR
       url: https://kakaoemoticonstudio.notion.site/webpanimator-guide
       inspection_scope: PAGE_BODY
+
+  decision_precedence_policy:
+    rule_id: OLY-GOV-002
+    order:
+    - VERIFIED_SCOPED_ZEUS_DECISION
+    - CURRENT_POLICY_BUNDLE
+    - COMPLIANT_TASK_CARD
+    - PROFILE_DEFAULT
+    unverified_issue_comment_is_execution_authority: false
+    conflict_action: BLOCK_AFFECTED_TASK_AND_ESCALATE_TO_HESTIA
+    required_decision_fields:
+    - decision_id
+    - source_ref
+    - decided_at
+    - scope
+    - supersedes
+    - implementation_stage
+    runtime_pin:
+    - policy_version
+    - policy_commit
+    revoked_memory_injection_allowed: false
+
+  role_boundary_policy:
+    rule_id: OLY-ROLE-001
+    artwork_owner: APHRODITE
+    creative_character_motion_owner: APHRODITE
+    file_conversion_owner: HEPHAESTUS
+    video_assembly_owner: HEPHAESTUS
+    artwork_slots:
+    - APHRODITE-CHARACTER-ILLUSTRATOR
+    - APHRODITE-CHARACTER-ANIMATOR
+    retired_slots:
+      HEPHAESTUS-CHARACTER-ILLUSTRATOR: APHRODITE-CHARACTER-ILLUSTRATOR
+      HEPHAESTUS-CHARACTER-ANIMATOR: APHRODITE-CHARACTER-ANIMATOR
+    slot_catalog_count: 91
+    assignable_slot_count: 89
+    conversion_allows_redraw: false
+    conversion_allows_generative_fill: false
+    existing_human_auto_reparent: false
+    existing_human_delete: false
+    reuse_existing_before_create: true
+    non_assignable_statuses:
+    - SUPERSEDED
+    - ARCHIVED
+
+  execution_handoff_policy:
+    rule_id: OLY-HND-001
+    coordination_owner: HESTIA
+    normal_gateway: HESTIA
+    direct_user_trigger: ONLY_WHEN_REQUIRED_BY_PRODUCT_FOR_DESIGNATED_EXECUTOR
+    required_fields:
+    - task_id
+    - executor_ref
+    - target_chat_ref
+    - action_manifest_id
+    - action_manifest_sha256
+    - approval_ref
+    - block_kind
+    - required_user_action
+    - return_task_ref
+    product_route_block_auto_retries: 0
+    permission_denial_bypass_allowed: false
+    agent_message_is_user_approval: false
+    repeat_valid_scope_approval_question: false
+    completion_requires_remote_receipt: true
+    unknown_outcome: BLOCK_AND_RECONCILE_BEFORE_RETRY
+    private_executor_refs_in_public_repo: false
+
+  emoticon_project_policy:
+    rule_id: OLY-EMO-002
+    playbook: playbooks/emoticon.md
+    template: templates/emoticon-project.yaml
+    distinct_product_project_id: true
+    name_match_implies_shared_canon: false
+    required_fields:
+    - project_id
+    - product_id
+    - character_id
+    - canon_ref
+    - spec_ref
+    - matrix_ref
+    - artwork_source
+    - generative_ok
+    - generative_scope
+    - submit_requires_zeus
+    - target_platform
+    - target_stage
+    - production_stage
+    - review_ref
+    before_artwork_requires:
+    - SPEC_REVIEW_PASS
+    - MATRIX_REVIEW_PASS
+    - ACCESSIBLE_HASH_VERIFIED_REFERENCES
+    - EXPLICIT_ARTWORK_SOURCE
+    - SCOPED_METHOD_DECISION
+    draft_study_without_canon_approval: DRAFT_CANDIDATE_ONLY_NOT_DERIVED_READY
+    submission_requires:
+    - APPROVED_CANON
+    - CURRENT_PLATFORM_REQUIREMENTS
+    - EXACT_ARTIFACT_REVIEW_PASS
+    - ZEUS_SUBMISSION_APPROVAL
+    generative_allowed_implies_submission_pass: false
+    blanket_generative_ban: false
+    redesign_existing_canon_requires_zeus: true
+    fixed_named_human_required: false
+
+  youtube_production_policy:
+    rule_id: OLY-YT-005
+    scope: 민음사 월드문학전집 숏츠
+    default_duration_target_seconds: 35
+    default_cut_count: 4
+    duration_is_approximate: true
+    task_card_overrides_profile_default: true
+    required_card_fields:
+    - duration_target
+    - cut_count
+    - cut_plan
+    - render_settings
+    - tool_capability_check_ref
+    reference_render_settings:
+      resolution: 1080p
+      clip_seconds: 10
+      aspect_ratio: '9:16'
+    reference_settings_are_verified_tool_capabilities: false
+    six_cut_60_second_variant: EXPLICIT_TASK_CARD_ONLY
+    quality_checks:
+    - tempo
+    - breathing_room
+    - narration_caption_sync
+    - cut_continuity
+    duration_is_revenue_kpi: false
+
+  youtube_queue_policy:
+    rule_id: OLY-YT-006
+    scope: 민음사 월드문학전집 숏츠
+    slots:
+    - '07'
+    - '12'
+    - '18'
+    - '19'
+    timezone_source: EXISTING_VERIFIED_CHANNEL_CONFIG
+    all_slots_content: 민음사
+    intentional_gaps:
+    - '036'
+    gap_filling_allowed: false
+    admission_review_states:
+    - PASS
+    hold_review_states:
+    - CONDITIONAL_PASS
+    - FAIL
+    - UNREVIEWED
+    review_must_match_current_artifact_hash: true
+    admission_asks_zeus: false
+    admission_grants_publication: false
+    append_position: BUFFER_END
+    held_item_restore: PASS_THEN_ORIGINAL_ORDER_AMONG_UNPUBLISHED_ITEMS
+    duplicate_key_fields:
+    - channel_ref
+    - episode_id
+    changed_published_item: SEPARATE_EXPLICIT_REPUBLICATION_DECISION
+    routine_mutation_authorized_by_admission: false
+    catch_up_default: false
+    catch_up_requires_explicit_zeus: true
+    normal_success_notification_required: false
+    exception_reports:
+    - PRODUCT_APPROVAL_BLOCK
+    - APPROVAL_SCOPE_MISSING
+    - NON_PASS_REVIEW
+    - BUFFER_EMPTY
+    - UNKNOWN_OUTCOME
+    required_entry_fields:
+    - episode_id
+    - project_id
+    - artifact_ref
+    - review_ref
+    - queue_position
+    - action_manifest_ref
+    - approval_ref
+    - publication_intent_id
+    - remote_receipt_ref
+    fatal_giggle_allowed: false
+
+  batch_approval_policy:
+    rule_id: OLY-YT-006
+    mode: FINITE_IMMUTABLE_MANIFEST_LIST
+    authenticated_zeus_event_required: true
+    required_fields:
+    - batch_id
+    - version
+    - sha256
+    - items
+    - excluded_episode_ids
+    - expires_at
+    - approval_event_ref
+    item_required_fields:
+    - episode_id
+    - publication_intent_id
+    - action_manifest_id
+    - action_manifest_sha256
+    - order
+    per_item_token_max_executions: 1
+    per_item_checks:
+    - MANIFEST_HASH
+    - TARGET
+    - EXPIRY
+    - REVOCATION
+    - IDEMPOTENCY
+    - REMOTE_OUTCOME
+    new_items_inherit_approval: false
+    review_pass_is_approval: false
+    mutations_require_new_batch_approval: true
+    replacement_revokes_unused_old_tokens: true
+    replacement_revocation_and_issuance_atomic: true
+    idempotency_survives_batch_replacement: true
+    unknown_outcome: BLOCK_AND_RECONCILE_BEFORE_RETRY
+    runtime_enabled: false

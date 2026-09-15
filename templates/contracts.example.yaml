@@ -1,10 +1,10 @@
-# OLYMPUS v1.3 계약 예시
+# OLYMPUS v1.4 계약 예시
 # 각 문서는 독립된 저장 레코드로 사용할 수 있다.
 # 플레이스홀더를 포함한 문서 예시이며 유효한 승인 토큰이나 실행 설정이 아니다.
 
 ---
 kind: "PROJECT_REQUEST"
-schema_version: "1.3"
+schema_version: "1.4"
 request:
   request_id: "REQ-20260903-0001"
   requested_by: "ZEUS"
@@ -21,7 +21,7 @@ request:
 
 ---
 kind: "PROJECT_PLAN"
-schema_version: "1.3"
+schema_version: "1.4"
 project:
   project_id: "PRJ-20260903-0001"
   trace_id: "TRC-20260903-0001"
@@ -47,12 +47,12 @@ project:
 
 ---
 kind: "HUMAN_CREATION_PROPOSAL"
-schema_version: "1.3"
+schema_version: "1.4"
 proposal:
   proposal_id: "HCP-20260903-0001"
   requested_by_god: "APOLLO"
   slot_id: "APOLLO-SHORTS-SCRIPT"
-  single_job: "승인된 비트 시트를 60초 숏츠 대본으로 변환한다"
+  single_job: "비트 시트를 숏츠 대본으로 바꾼다"
   reason_existing_humans_insufficient: "동일 슬롯에 등록된 인간이 없음"
   proposed_display_name: null
   symbolic_only: true
@@ -69,14 +69,14 @@ proposal:
 
 ---
 kind: "HUMAN"
-schema_version: "1.3"
+schema_version: "1.4"
 human:
   human_id: "AP-H001"
   display_name: "상징 이름"
   symbolic_only: true
   parent_god: "APOLLO"
   slot_id: "APOLLO-SHORTS-SCRIPT"
-  single_job: "승인된 비트 시트를 60초 숏츠 대본으로 변환한다"
+  single_job: "비트 시트를 숏츠 대본으로 바꾼다"
   prompt_version: "1.1.0"
   template_id: "TPL-APOLLO-SHORTS-SCRIPT"
   template_version: "1.1.0"
@@ -92,7 +92,7 @@ human:
 
 ---
 kind: "ATOMIC_TASK"
-schema_version: "1.3"
+schema_version: "1.4"
 task:
   task_id: "PRJ-20260903-0001-AP-T001"
   project_id: "PRJ-20260903-0001"
@@ -101,6 +101,7 @@ task:
   title: "승인된 비트 시트를 숏츠 대본으로 변환"
   single_action: "CREATE_SHORTS_SCRIPT"
   model_profile: "WRITER"
+  duration_target: 60  # 이 SAP 예시 카드에 한정; 민음사 기본 목표가 아님
   inputs:
     - artifact_id: "ART-BEATS-0001"
       required_version: 2
@@ -136,7 +137,7 @@ task:
 
 ---
 kind: "ARTIFACT"
-schema_version: "1.3"
+schema_version: "1.4"
 artifact:
   artifact_id: "ART-SCRIPT-0001"
   project_id: "PRJ-20260903-0001"
@@ -146,7 +147,7 @@ artifact:
   parent_god: "APOLLO"
   model_profile: "WRITER"
   prompt_version: "1.1.0"
-  policy_version: "1.3"
+  policy_version: "1.4"
   policy_commit: "<loaded-policy-commit>"
   input_artifacts:
     - "ART-BEATS-0001@v2"
@@ -162,7 +163,7 @@ artifact:
 
 ---
 kind: "APPROVAL_REQUEST"
-schema_version: "1.3"
+schema_version: "1.4"
 approval_request:
   request_id: "APRQ-0001"
   project_id: "PRJ-20260903-0001"
@@ -179,7 +180,7 @@ approval_request:
 
 ---
 kind: "APPROVAL_TOKEN"
-schema_version: "1.3"
+schema_version: "1.4"
 approval_token:
   token_id: "APR-0001"
   approved_by: "ZEUS"
@@ -197,7 +198,7 @@ approval_token:
 
 ---
 kind: "ACTION_MANIFEST"
-schema_version: "1.3"
+schema_version: "1.4"
 action_manifest:
   action_manifest_id: "ACT-YOUTUBE-0001"
   action: "YOUTUBE_PUBLISH"
@@ -224,7 +225,7 @@ action_manifest:
 
 ---
 kind: "EXECUTION_TEMPLATE"
-schema_version: "1.3"
+schema_version: "1.4"
 execution_template:
   template_id: "TPL-APOLLO-SHORTS-SCRIPT"
   version: "1.1.0"
@@ -247,7 +248,7 @@ execution_template:
 
 ---
 kind: "ROUTINE_PROPOSAL"
-schema_version: "1.3"
+schema_version: "1.4"
 routine:
   routine_id: "RTN-EXAMPLE-0001"
   workflow_version: "1.1.0"
@@ -267,12 +268,12 @@ routine:
 # 운영 계약의 문서 예시다. 실제 실행·승인·측정 증거가 아니다.
 # 실행 가능한 로컬 입력 형식은 runtime/README.md와 examples/를 따른다.
 kind: "WORKFLOW_PROPOSAL"
-schema_version: "1.3"
+schema_version: "1.4"
 workflow:
   workflow_id: "WF-BAM-EXPRESSIONS"
   version: "0.1.0"
   sha256: "<hash-of-reviewed-workflow>"
-  policy_version: "1.3"
+  policy_version: "1.4"
   policy_commit: "<loaded-policy-commit>"
   input_contract: ["APPROVED_BAM_CANON", "HASH_VERIFIED_REFERENCES", "PRODUCTION_BRIEF"]
   output_contract: "REVIEWED_EXPRESSION_AND_MOTION_PACKAGE"
@@ -286,7 +287,7 @@ workflow:
 
 ---
 kind: "PROJECT_RESOURCE_POLICY"
-schema_version: "1.3"
+schema_version: "1.4"
 resource_policy:
   project_id: "PRJ-BAM-EXAMPLE"
   parent_project_id: null
@@ -303,7 +304,7 @@ resource_policy:
 
 ---
 kind: "CHECKPOINT"
-schema_version: "1.3"
+schema_version: "1.4"
 checkpoint:
   checkpoint_id: "CP-BAM-EXAMPLE"
   project_id: "PRJ-BAM-EXAMPLE"
@@ -320,7 +321,7 @@ checkpoint:
   lease_generation: 0
   execution_template_ref: "<id-version-hash>"
   model_profile_ref: "<profile-version>"
-  policy_version: "1.3"
+  policy_version: "1.4"
   policy_commit: "<loaded-policy-commit>"
   memory_refs: []
   review_ref: null
@@ -333,7 +334,7 @@ checkpoint:
 
 ---
 kind: "MEMORY_PROPOSAL"
-schema_version: "1.3"
+schema_version: "1.4"
 memory:
   memory_id: "MEM-BAM-EXAMPLE"
   version: "0.1.0"
@@ -343,13 +344,13 @@ memory:
   evidence_refs: []
   scope:
     project_id: "PRJ-BAM-EXAMPLE"
-    department: "BUILD_PRODUCTION"
-    slot_id: "HEPHAESTUS-CHARACTER-ANIMATOR"
+    department: "APPEAL_UX"
+    slot_id: "APHRODITE-CHARACTER-ANIMATOR"
     template_version: "<tested-version>"
     model_profile_version: "<tested-profile-version>"
     character_canon_ref: "<approved-canon-id-version-hash>"
     data_classification: "INTERNAL"
-  owner_god: "HEPHAESTUS"
+  owner_god: "APHRODITE"
   proposed_by: "DEMETER"
   verified_by: null
   verification_ref: null
@@ -362,7 +363,7 @@ memory:
 
 ---
 kind: "VERSION_CHANGE_PROPOSAL"
-schema_version: "1.3"
+schema_version: "1.4"
 change:
   change_id: "CHG-BAM-EXAMPLE"
   scope: "동일 직무의 다음 내부 제작 업무만 비교 후보"

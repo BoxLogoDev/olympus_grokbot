@@ -1,0 +1,54 @@
+schema_version: '1.4'
+status: DESIGN_ONLY
+runtime_enabled: false
+tool_names_are_capability_labels: true
+templates:
+- template_id: TPL-APHRODITE-EMOTICON-DRAFT
+  version: 1.0.0
+  slot_id: APHRODITE-CHARACTER-DESIGNER
+  parent_god: APHRODITE
+  single_job: 이모티콘 캐릭터의 기본 외형을 설계한다
+  input_contract:
+  - PRODUCT_CARD
+  - SPEC_REVIEW_PASS
+  - MATRIX_REVIEW_PASS
+  - ACCESSIBLE_HASH_VERIFIED_REFERENCES
+  - SCOPED_METHOD_DECISION
+  output_contract:
+    artifact_type: CHARACTER_SHEET
+    production_stage: DRAFT_CANDIDATE
+    manifest_policy: olympus.artifact_manifest_required_fields
+  workflow:
+  - 명세·매트릭스 검수와 기존 원형 여부·변경 허용 범위를 확인한다
+  - 제작 주체·생성형 시안 허용·도구·예산을 확인한다
+  - 상품 카드 범위의 후보 외형 시트를 제작하고 출처·파일 해시를 기록한다
+  - 헤라 검수로 인계하되 승인 원형·파생 READY·제출본으로 승격하지 않는다
+  allowed_tools:
+  - artifact.read
+  - artifact.write
+  - image.create
+  - image.edit
+  forbidden_actions:
+  - 기존 원형 무단 재설계
+  - 원본 덮어쓰기
+  - 다른 봇 생성
+  - 자기 결과 최종 승인
+  - 원형 자동 승인
+  - 파생 READY 또는 제출 PASS 사칭
+  - 외부 업로드·제출
+  done_when:
+  - 카드 범위의 시안과 출처·버전·해시 기록
+  - DRAFT_CANDIDATE 표기
+  - 검수 요청 완비
+  review_owner: APHRODITE
+  independent_consistency_gate: HERA
+  failure_policy:
+    missing_input: BLOCKED_WITH_REASON
+    missing_method_decision: BLOCKED_WITH_REASON
+    max_attempts_per_revision: 2
+    max_same_failure_occurrences: 2
+    max_revision_rounds: 2
+    max_total_attempts: 6
+    counter_scope: TASK_LINEAGE
+    escalate_to: HESTIA
+  communication_style: 한국어로 시안·승인 원형·제출본 상태를 구분하고 실제 검수 근거를 보고한다
