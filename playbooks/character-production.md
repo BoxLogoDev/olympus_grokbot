@@ -1,7 +1,7 @@
 # 캐릭터 제작·확장 파이프라인
 
-정책: [OLYMPUS v1.2](../OLYMPUS_Agent_Architecture_v1.2.md), `OLY-INV-022`, `OLY-CHR-001`  
-프로젝트 라인: `CHARACTER` / 최초 캐릭터: [밤 (`BAM`)](../characters/bam/character.yaml)  
+정책: [OLYMPUS v1.4](../OLYMPUS_Agent_Architecture_v1.4.md), `OLY-INV-022`, `OLY-CHR-001`
+프로젝트 라인: `CHARACTER` / 최초 캐릭터: [밤 (`BAM`)](../characters/bam/character.yaml)
 상태: 설계·계약 반영. 원형 확정·실제 이미지 제작·실행 시스템 검증은 아직 진행하지 않았다.
 
 ## 1. 목적과 범위
@@ -64,8 +64,8 @@ flowchart TD
 | 캐릭터 원형 명세 | `APHRODITE-CHARACTER-CANON` | `CHARACTER_CANON_DRAFT` |
 | 표정·포즈 지시 | `APHRODITE-EXPRESSION-DESIGNER` | 표정·포즈 매트릭스 |
 | 장면·동작 지시 | `APOLLO-SCENE-DIRECTOR` | 승인된 대본을 참조한 샷 지시 |
-| 정지 이미지 1개 | `HEPHAESTUS-CHARACTER-ILLUSTRATOR` | `CHARACTER_STILL` |
-| 짧은 동작 1개 | `HEPHAESTUS-CHARACTER-ANIMATOR` | `CHARACTER_MOTION` |
+| 정지 이미지 1개 | `APHRODITE-CHARACTER-ILLUSTRATOR` | `CHARACTER_STILL` |
+| 짧은 동작 1개 | `APHRODITE-CHARACTER-ANIMATOR` | `CHARACTER_MOTION` |
 | 일관성 검사 | `HERA-CONSISTENCY-AUDIT` | 부위별 비교·위반·통과 기록 |
 | 이미지 규격화 | `HEPHAESTUS-IMAGE-PROCESSOR` | 크기·형식·이름을 맞춘 패키지 |
 | 영상 조립 | `HEPHAESTUS-VIDEO-ASSEMBLER` | 영상·음성·자막의 조립본 |
@@ -124,4 +124,10 @@ flowchart TD
 
 ## 8. 실행 전환 확인
 
-실행 환경은 v1.2 정책 커밋을 고정하고 신규 템플릿의 도구 라벨을 실제 도구에 연결한다. 아직 구현되지 않은 라우터·승인 큐·원형 검증기를 구현 완료로 보고하지 않는다. 수용 시에는 미승인 원형, 해시가 바뀐 참조, 미검수 모션 입력, 자기 승인, 공개 승인 누락이 실제로 차단되는지 확인한다.
+실행 환경은 v1.4 정책 커밋을 고정하고 신규 템플릿의 도구 라벨을 실제 도구에 연결한다. 아직 구현되지 않은 라우터·승인 큐·원형 검증기를 구현 완료로 보고하지 않는다. 수용 시에는 미승인 원형, 해시가 바뀐 참조, 미검수 모션 입력, 자기 승인, 공개 승인 누락이 실제로 차단되는지 확인한다.
+
+## 9. 원화·파일 처리와 상품 분리 (`OLY-ROLE-001`, `OLY-EMO-002`)
+
+캐릭터 그림·창작 동작은 아프로디테의 현행 슬롯에 배정한다. 헤파이스토스는 검수된 입력의 크기·포맷·파일명 변환과 영상 조립만 수행한다. 원형을 손질하거나 배경·외곽선을 복원하는 시각 편집은 아프로디테의 별도 업무다. 이전 헤파이스토스 그림·동작 슬롯은 이력용으로 보존하고 신규 배정하지 않는다.
+
+밤 `BAM` 공통 원형 프로젝트와 「밤티나는 밤이」상품 프로젝트를 이름만으로 합치지 않는다. 상품별 프로젝트 ID와 원형 참조·승인 상태는 [이모티콘 플레이북](emoticon.md)을 따른다. 그 상품의 시안 허용·문구 채택으로 이 파일의 밤 원형 승인 상태를 바꾸지 않는다.
