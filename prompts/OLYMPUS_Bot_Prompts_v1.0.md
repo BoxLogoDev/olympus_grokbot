@@ -1,3 +1,7 @@
+> **DEPRECATED — Olympus ended 2026-09-24; use SHORTS_Operating_v1.md.**
+>
+> 현재 운영 문서: [SHORTS_Operating_v1.md](../SHORTS_Operating_v1.md)
+
 # OLYMPUS 봇 프롬프트 모음 v1.0
 
 이 문서는 실제 봇 설정 화면에 복사할 수 있는 기준 프롬프트다.
