@@ -1,3 +1,7 @@
+> **DEPRECATED — Olympus ended 2026-09-24; use SHORTS_Operating_v1.md.**
+>
+> 현재 운영 문서: [SHORTS_Operating_v1.md](SHORTS_Operating_v1.md)
+
 ---
 title: "OLYMPUS 멀티에이전트 운영 아키텍처"
 version: "1.4"

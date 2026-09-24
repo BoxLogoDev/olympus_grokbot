@@ -1,3 +1,7 @@
+> **DEPRECATED — Olympus ended 2026-09-24; use SHORTS_Operating_v1.md.**
+>
+> 현재 운영 문서: [SHORTS_Operating_v1.md](../SHORTS_Operating_v1.md)
+
 # OLYMPUS 봇 프롬프트 모음 v1.2
 
 이 문서는 v1.2 헌법에 연결된 기준 프롬프트다. 공통 헌법과 담당 역할의 설정을 함께 로드한다. 실행 적용은 별도 로드 확인이 필요하다.
